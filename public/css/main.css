@@ -63,15 +63,15 @@
   border-color: #6D006D;
 }
 
-    .index-btn:active {
-        background-color: #b716b7;
-        border-color: #6D006D;
-    }
-
 .vol-login-btn {
     color: #6D006D;
     background-color: #ffffff;
     border-color: #6D006D;
     margin: 5px;
     min-width: 175px;
+}
+
+.vol-login-btn:hover, .vol-login-btn:active, .vol-login-btn:focus{
+  background-color: #b716b7;
+  border-color: #6D006D;
 }
