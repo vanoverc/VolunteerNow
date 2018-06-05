@@ -1,14 +1,36 @@
-body {  }
+#header-body { 
+  background-color:#b716b7;
+  min-height: 180px;
+}
 
-#header-container, #main-container, #footer-container {
+#footer-body{
+  background-color:#b716b7;
+  min-height:90px;
+}
+
+.footer-h4{
+  margin:auto;
+  color:#ffffff;
+}
+
+/*#header-container, #main-container, #footer-container {
   min-width: 320px;
   max-width: 640px;
   margin: auto;
   padding: 10px;
-}
+}*/
 
 #header-container, #footer-container {
   text-align: center;
+}
+
+#footer-container{
+  padding-top: 30px;
+}
+
+#title-text{
+  color: #ffffff;
+  padding-top: 50px;
 }
 
 .form-fields-container {
@@ -17,4 +39,26 @@ body {  }
 
 .pending-organization {
   padding: 10px 0;
+}
+
+#index-container{
+  background-color: #F9A0F9;
+  padding-bottom: 20px;
+}
+
+.index-h2{
+  color: #6D006D;
+}
+
+.index-btn{
+  color: #6D006D;
+  background-color: #ffffff;
+  border-color: #6D006D;
+  margin:5px;
+  min-width:175px;
+}
+
+.index-btn:hover{
+  background-color: #b716b7;
+  border-color: #6D006D;
 }
