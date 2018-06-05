@@ -1,0 +1,21 @@
+<div id="org-profile-edit-container">
+    <div id="org-profile-edit-heading">
+        <h1>Edit Organization</h1>
+        <h2>{{org.organization_name}}</h2>
+    </div>
+    <div id="org-profile-edit-body">
+        <form id="edit-organization" action="/update-organization/" method="post">
+            <fieldset>
+                <input type="hidden" name="organization_id" value="{{organization_id}}"/>
+                <p>Street Address: <input type="text" name="address" value="{{org.address_num}} {{org.address_street}}"/></p>
+                <p>State: <input type="text" name="address_state" value="{{org.address_state}}"/></p>
+                <p>Zip: <input type="text" name="address_zip" value="{{org.address_zip}}"/></p>
+                <p>E-mail: <input type="text" name="contact_email" value="{{org.contact_email}}"/></p>
+                <p>Phone: <input type="text" name="contact_phone" value="{{org.contact_phone}}"/></p>
+                <p>Primary Contact: <input type="text" name="contact_name" value="{{org.contact_name}}"/></p>
+                <p>URL: <input type="text" name="contact_url" value="{{org.contact_url}}"/></p>
+            </fieldset>
+            <input type="submit" value="Save Changes"> 
+        </form>
+    </div>
+</div>

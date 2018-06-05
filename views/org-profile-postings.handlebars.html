@@ -1,0 +1,52 @@
+<head>
+    <!-- Bootstrap Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+
+<div id="org-events-container">
+    <div id="org-events-heading">
+        <h1>Events</h1>
+        <h2>{{org.organization_name}}</h2>
+    </div>
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Event Name</th>
+                    <th>Address</th>
+                    <th>State</th>
+                    <th>Zip</th>
+                    <th>Min Age</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Description</th>
+                    <th>Contact Email</th>
+                    <th>Contact Phone</th>
+                    <th>Contact Name</th>
+                    <th>URL</th>
+                </tr>
+            </thead>
+            {{#each event}}
+            <tr>
+                <td>{{event_name}}</td>
+                <td>{{address_num}} {{address_street}}</td>
+                <td>{{address_state}}</td>
+                <td>{{address_zip}}</td>
+                <td>{{min_age}}</td>
+                <td>{{date_state}}</td>
+                <td>{{date_end}}</td>
+                <td>{{event_description}}</td>
+                <td>{{contact_email}}</td>
+                <td>{{contact_phone}}</td>
+                <td>{{contact_name}}</td>
+                <td>{{contact_url}}</td>
+            </tr>
+            {{/each}}
+        </table>
+    </div>
+</div>
+
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>

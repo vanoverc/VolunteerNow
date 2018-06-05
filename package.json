@@ -1,0 +1,18 @@
+{
+  "name": "mycroft-api-tutorial",
+  "version": "1.0.0",
+  "description": "OSU CS 361 VolunteerNow",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Caitlin Dudley, Richard Reese IV, Colin Van Overschelde, Samuel Bernstein, John Bonham",
+  "license": "BSD",
+  "dependencies": {
+    "mysql": "^2.8.0",
+    "body-parser": "^1.13.3",
+    "express": "^4.13.2",
+    "express-handlebars": "^2.0.1",
+    "express-session": "^1.11.3"
+  }
+}
