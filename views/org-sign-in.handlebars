@@ -1,17 +1,39 @@
-<div id="index-container">
-  <form class="index-sign-in-form" action="org-sign-in" method="POST">
-    <div class="form-fields-container">
-      <label for="sign-in-email">Email: </label>
-      <input id="sign-in-email" type="text" name="sign_in_email">
-    </div>
+<head>
+  <link rel="stylesheet" type="text/css" media="all" href="/css/organization.css" >
+</head>
 
-    <div class="form-fields-container">
-      <label for="sign-in-password">Password: </label>
-      <input id="sign-in-password" type="password" name="sign_in_password">
-    </div>
+<div id="organization-sign-in-container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-4 col-xs-offset-4" align="center">
+        <h2 class="org-sign-in-h2">Organization Sign In</h2>
+        <form class="org-sign-in-form" action="org-sign-in" method="POST">
+          <div class="form-fields-container">
+            <label for="sign-in-email">Email: </label>
+            <input id="sign-in-email" type="text" name="sign_in_email">
+          </div>
 
-    <div class="form-fields-container">
-      <button type="submit">Sign In</button>
+          <div class="form-fields-container">
+            <label for="sign-in-password">Password: </label>
+            <input id="sign-in-password" type="password" name="sign_in_password">
+          </div>
+
+          <div class="form-fields-container">
+            <button class="btn btn-primary org-sign-in-btn" type="submit">Sign In</button>
+          </div>
+        </form>
+      </div>
     </div>
-  </form>
+  </div>
 </div>
+
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- Latest compiled and minified Bootstrap JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script>
+  $(function(){
+    $("#header-body").css("background-color", "#EB1D58");
+    $("#footer-body").css("background-color", "#EB1D58");
+  });
+</script>
