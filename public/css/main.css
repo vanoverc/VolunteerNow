@@ -58,7 +58,20 @@
   min-width:175px;
 }
 
-.index-btn:hover{
+.index-btn:hover, .index-btn:active, .index-btn:focus{
   background-color: #b716b7;
   border-color: #6D006D;
+}
+
+    .index-btn:active {
+        background-color: #b716b7;
+        border-color: #6D006D;
+    }
+
+.vol-login-btn {
+    color: #6D006D;
+    background-color: #ffffff;
+    border-color: #6D006D;
+    margin: 5px;
+    min-width: 175px;
 }
