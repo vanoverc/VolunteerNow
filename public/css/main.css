@@ -55,23 +55,30 @@
   background-color: #ffffff;
   border-color: #6D006D;
   margin:5px;
-  min-width:175px;
+  width:175px;
 }
 
-.index-btn:hover, .index-btn:active, .index-btn:focus{
-  background-color: #b716b7;
-  border-color: #6D006D;
+    .index-btn:hover, .index-btn:active, .index-btn:focus {
+        color: #6D006D;
+        background-color: #b716b7;
+        border-color: #6D006D;
+    }
+
+#vol-sign-in-container {
+    background-color: #9CB1E4;
+    color: #061D52;
 }
 
 .vol-login-btn {
-    color: #6D006D;
+    color: #061D52;
     background-color: #ffffff;
-    border-color: #6D006D;
+    border-color: #061D52;
     margin: 5px;
-    min-width: 175px;
+    width: 175px;
 }
 
-.vol-login-btn:hover, .vol-login-btn:active, .vol-login-btn:focus{
-  background-color: #b716b7;
-  border-color: #6D006D;
-}
+    .vol-login-btn:hover, .vol-login-btn:active, .vol-login-btn:focus {
+        color: #ffffff;
+        background-color: #0538AF;
+        border-color: #061D52;
+    }
