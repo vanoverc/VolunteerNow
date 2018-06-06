@@ -18,6 +18,7 @@
                 <input id="vol-id" type="hidden" name="volunteer_id" value="{{volunteer_id}}" />
                 {{#each event}}
                 <div class="event-card">
+                    <input type="hidden" name="event_id" value="{{event_id}}" />
                     <div class="row">
                         <div class="col-xs-7">
                             <strong>{{date_start}}{{date_end}}</strong>
@@ -35,11 +36,10 @@
                     </div>
                     <div class="row">
                         <div class="col-xs-6" align="center">
-                            <button type="button" class="btn browse-event-btn">Details</button>
+                            <button type="button" class="btn browse-event-btn event-details-btn">Details</button>
                         </div>
                         <div class="col-xs-6" align="center">
                             <button type="button" class="btn browse-event-btn sign-up-btn">Sign Up</button>
-                            <input type="hidden" name="event_id" value="{{event_id}}" />
                         </div>
                     </div>
                 </div>
@@ -65,6 +65,14 @@
             console.log("Clicking map view");
         });
 
+        // Add Event Details listener
+        $(".event-details-btn").click(function () {
+
+            var eventId = $('#event-id').val();
+            window.location.assign('/event-details/' + eventId);
+       
+        });
+
         // Add Signup event listener
         $(".sign-up-btn").click(function () {
             
@@ -73,11 +81,7 @@
             var myData = {};
             myData.fk_event_id = eventId;
             myData.fk_volunteer_id = volunteerId;
-            console.log("*************************");
-            console.log("myData:");
-            console.log("*************************");
-            console.log(myData);
-            console.log("*************************");
+            
             $.ajax({
                 url: '/add-event-volunteer',
                 type: 'POST',

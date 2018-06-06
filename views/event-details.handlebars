@@ -1,0 +1,35 @@
+<div class="container-fluid">
+    <h1>Event Details</h1>
+    <h2>{{event.organization_name}}</h2>
+    <div class="row">
+        <div class="col-xs-8">
+            <h3>{{event.event_name}}</h3>
+        </div>
+        <div class="col-xs-4">
+            <strong>{{event.date_start}}{{event.date_end}}</strong>
+        </div>
+
+    </div>
+    <p><strong>Description</strong></p>
+    <p>{{event.event_description}}</p>
+    <p><strong>Minimum Age:</strong> {{event.min_age}}+</p>
+    <div class="row">
+        <div class="col-xs-6">
+            <p><strong>Address</strong></p>
+            <p>{{event.address_num}} {{event.address_street}}
+            <br />
+            {{event.address_state}} {{event.address_zip}}
+            </p>
+        </div>
+        <div class="col-xs-6">
+            <p><strong>Contact Information</strong></p>
+            <p>
+                {{event.contact_name}}
+                <br />
+                {{event.contact_phone}} {{event.contact_email}}
+                <br />
+                {{event.contact_url}}
+            </p>
+        </div>
+    </div>
+</div>
