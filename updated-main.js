@@ -502,13 +502,13 @@ app.get('/browse-events', function (req, res) {
         if (err) {
             console.log(err);
         }
-        console.log(results);
+        //console.log(results);
 
         //Format dates
         results.forEach(function (someEvent) {
             var startDateString = someEvent.date_start.toString();
             var endDateString = someEvent.date_end.toString();
-            console.log(startDateString);
+            //console.log(startDateString);
             var startDate = startDateString.slice(4, 16);
             var endDate = endDateString.slice(4, 16);
             if (startDate == endDate) {
@@ -521,6 +521,7 @@ app.get('/browse-events', function (req, res) {
         });
 
         context.event = results;
+        console.log(context);
         res.render('browse-events', context);
     });
 });
