@@ -351,7 +351,7 @@ app.post('/volunteer-sign-in', function (req, res) {
     if (email != '' && password != '') {
         console.log("Logging in...");
 
-        var query = "SELECT volunteer_id, contact_email FROM Volunteer_Account WHERE contact_email = ? AND password = ?";
+        var query = "SELECT volunteer_id, contact_email FROM Volunteer_Account WHERE contact_email = ? AND volunteer_password = ?";
         mysql.pool.query(query, [email, password], function (err, results) {
             if (err) {
                 console.log(err);
@@ -375,10 +375,12 @@ app.post('/volunteer-sign-in', function (req, res) {
 
 // create volunteer account
 app.post('/volunteer-sign-up', function (req, res) {
-    var createQuery = "INSERT INTO Volunteer_Account (first_name, last_name, contact_phone, contact_email, password) VALUES (?,?,?,?,?)";
+    var createQuery = "INSERT INTO Volunteer_Account (first_name, last_name, contact_phone, contact_email, volunteer_password) VALUES (?,?,?,?,?)";
     var volunteerParams = [req.body['volunteer_first_name'], req.body['volunteer_last_name'], req.body['volunteer_phone_number'], req.body['volunteer_email'], req.body['volunteer_password']];
     mysql.pool.query(createQuery, volunteerParams, function (error, results) {
         if (error) {
+            console.log("Unable to create new volunteer");
+            console.log(error);
             res.render("volunteer-sign-up");
         } else {
             var retrieveQuery = "SELECT volunteer_id, contact_email FROM Volunteer_Account WHERE volunteer_id = ?";
@@ -490,7 +492,7 @@ app.get('/browse-events', function (req, res) {
     // Session is not required to browse events
     var context = {};
     var query = "SELECT E.event_id, E.event_name, E.address_num, E.address_street, E.address_state, E.address_zip, E.min_age, E.date_start, E.date_end, E.event_description, ";
-    query = query + "E.contact_email, E.contact_phone, E.contact_name, E.contact_url, O.organization_id, O.organization_name FROM`Event` E ";
+    query = query + "E.contact_email, E.contact_phone, E.contact_name, E.contact_url, O.organization_id, O.organization_name FROM `Event` E ";
     query = query + "INNER JOIN Organization O ON O.organization_id = E.fk_organization_id WHERE E.date_start < (NOW()) AND E.date_end > (NOW()) AND O.approved = ? ";
     query = query + "ORDER BY E.date_end ASC;"
     mysql.pool.query(query, [1], function (err, results) {
@@ -513,6 +515,19 @@ app.get('/browse-events', function (req, res) {
             }
             someEvent.date_start = startDate;
             someEvent.date_end = endDate;
+
+            // Get volunteer count
+            var newQuery = "SELECT COUNT(fk_volunteer_id) AS vol_count FROM Event_Volunteer WHERE fk_event_id = ?";
+            mysql.pool.query(query, someEvent.event_id, function (err, results) {
+                if (err) {
+                    console.log(err);
+                }
+                if (results[0]) {
+                    someEvent.volunteer_count = results[0].vol_count;
+                } else {
+                    someEvent.volunteer_count = 0;
+                }
+            });
         });
         
         context.event = results;
