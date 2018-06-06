@@ -497,10 +497,7 @@ app.get('/browse-events', function (req, res) {
     } else {
         context.volunteer_id = 99999;
     }
-    var query = "SELECT E.event_id, E.event_name, E.address_num, E.address_street, E.address_state, E.address_zip, E.min_age, E.date_start, E.date_end, E.event_description, ";
-    query = query + "E.contact_email, E.contact_phone, E.contact_name, E.contact_url, O.organization_id, O.organization_name FROM `Event` E ";
-    query = query + "INNER JOIN Organization O ON O.organization_id = E.fk_organization_id WHERE E.date_start < (NOW()) AND E.date_end > (NOW()) AND O.approved = ? ";
-    query = query + "ORDER BY E.date_end ASC;"
+    var query = "SELECT E.event_id, E.event_name, E.address_num, E.address_street, E.address_state, E.address_zip, E.min_age, E.date_start, E.date_end, E.event_description, E.contact_email, E.contact_phone, E.contact_name, E.contact_url, O.organization_id, O.organization_name, COUNT(EV.fk_volunteer_id) AS vol_count FROM `Event` E INNER JOIN Organization O ON O.organization_id = E.fk_organization_id LEFT JOIN Event_Volunteer EV ON E.event_id = EV.fk_event_id WHERE E.date_start < (NOW()) AND E.date_end > (NOW()) AND O.approved = 1 GROUP BY E.event_id ORDER BY E.date_end ASC;"
     mysql.pool.query(query, [1], function (err, results) {
         if (err) {
             console.log(err);
@@ -521,39 +518,11 @@ app.get('/browse-events', function (req, res) {
             }
             someEvent.date_start = startDate;
             someEvent.date_end = endDate;
-
-            // Get volunteer count
-            var newQuery = "SELECT COUNT(fk_volunteer_id) AS vol_count FROM Event_Volunteer WHERE fk_event_id = ?";
-            mysql.pool.query(newQuery, someEvent.event_id, function (err, newResults) {
-                if (err) {
-                    console.log(err);
-                }
-                if (newResults[0]) {
-                    console.log("Displaying event");
-                    console.log(newResults[0]);
-                    console.log(newResults[0].vol_count + " Volunteers");
-                    someEvent.volunteer_count = newResults[0].vol_count;
-                    console.log("someEvent.volunteer_count = " + someEvent.volunteer_count);
-                    console.log(someEvent);
-                } else {
-                    console.log("No volunteers for event");
-                    someEvent.volunteer_count = 0;
-                }
-                complete(res, results);
-            });
         });
-        complete(res, results);
-    });
 
-    function complete(res, results) {
-        callbackCount++;
-        if (callbackCount > 1) {
-            context.event = results;
-            console.log("Printing Context");
-            console.log(context);
-            res.render('browse-events', context);
-        }
-    }
+        context.event = results;
+        res.render('browse-events', context);
+    });
 });
 
 // Volunter signs up for event
