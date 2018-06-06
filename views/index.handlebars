@@ -7,6 +7,9 @@
         <div id="index-body" class="col-xs-6 col-xs-offset-3" align="center">
             <h3>Welcome to Volunteer Now!</h3>
             <br>
+            <div>
+                <button id="browse-events-btn" type="button" class="btn index-btn">Browse Volunteer Events</button>
+            </div>
             <p>Please indicate if you are a Volunteer or an Organization:</p>
             <h2 class="index-h2">Volunteers</h2>
             <div>
@@ -41,5 +44,8 @@
     });
     $("#volunteer-sign-up-btn").click(function(){
         window.location.href="/volunteer-sign-up";
+    });
+    $("#browse-events-btn").click(function () {
+        window.location.href = "/browse-events";
     });
 </script>
