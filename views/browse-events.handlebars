@@ -1,0 +1,92 @@
+<head>
+    <link rel="stylesheet" type="text/css" media="all" href="/css/browse-events-style.css">
+</head>
+
+<div id="browse-events-container" class="container-fluid">
+    <div id="browse-type-menu" class="row">
+        <div class="col-xs-6" align="center">
+            <div id="list-view" class="browse-type-btn">List View</div>
+        </div>
+        <div class="col-xs-6" align="center">
+            <div id="map-view" class="browse-type-btn">Map View</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <h1 class="browse-event-h1">Browse Events</h1>
+            <div id="event_list">
+                <input id="vol-id" type="hidden" name="volunteer_id" value="{{volunteer_id}}" />
+                {{#each event}}
+                <div class="event-card">
+                    <div class="row">
+                        <div class="col-xs-7">
+                            <strong>{{date_start}}{{date_end}}</strong>
+                        </div>
+                        <div class="col-xs-5">
+                            <strong>Volunteers: {{vol_count}}</strong>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6"><strong>{{event_name}}</strong></div>
+                        <div class="col-xs-6" align="center"><strong>{{organization_name}}</strong></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">{{event_description}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6" align="center">
+                            <button type="button" class="btn browse-event-btn">Details</button>
+                        </div>
+                        <div class="col-xs-6" align="center">
+                            <button type="button" class="btn browse-event-btn sign-up-btn">Sign Up</button>
+                            <input type="hidden" name="event_id" value="{{event_id}}" />
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- Latest compiled and minified Bootstrap JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script>
+    $(function () {
+        // Add List View event listener
+        $("#list-view").click(function () {
+            console.log("Clicking list view");
+        });
+
+        // Add Map View event listener
+        $("#map-view").click(function () {
+            console.log("Clicking map view");
+        });
+
+        // Add Signup event listener
+        $(".sign-up-btn").click(function () {
+            
+            var eventId = $(this).next().val();
+            var volunteerId = $('#vol-id').val();
+            var myData = {};
+            myData.fk_event_id = eventId;
+            myData.fk_volunteer_id = volunteerId;
+            console.log("*************************");
+            console.log("myData:");
+            console.log("*************************");
+            console.log(myData);
+            console.log("*************************");
+            $.ajax({
+                url: '/add-event-volunteer',
+                type: 'POST',
+                data: { fk_event_id: eventId, fk_volunteer_id: volunteerId },
+                success: function (result) {
+                    window.location.reload(true);
+                }
+            });
+        });
+
+    });
+</script>
