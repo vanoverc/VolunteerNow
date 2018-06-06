@@ -489,8 +489,14 @@ app.post('/volunteer-update', function (req, res) {
 
 // Display browse events page
 app.get('/browse-events', function (req, res) {
+    var callbackCount = 0;
     // Session is not required to browse events
     var context = {};
+    if (session.volunteer_id) {
+        context.volunteer_id = session.volunteer_id;
+    } else {
+        context.volunteer_id = 99999;
+    }
     var query = "SELECT E.event_id, E.event_name, E.address_num, E.address_street, E.address_state, E.address_zip, E.min_age, E.date_start, E.date_end, E.event_description, ";
     query = query + "E.contact_email, E.contact_phone, E.contact_name, E.contact_url, O.organization_id, O.organization_name FROM `Event` E ";
     query = query + "INNER JOIN Organization O ON O.organization_id = E.fk_organization_id WHERE E.date_start < (NOW()) AND E.date_end > (NOW()) AND O.approved = ? ";
@@ -518,20 +524,51 @@ app.get('/browse-events', function (req, res) {
 
             // Get volunteer count
             var newQuery = "SELECT COUNT(fk_volunteer_id) AS vol_count FROM Event_Volunteer WHERE fk_event_id = ?";
-            mysql.pool.query(query, someEvent.event_id, function (err, results) {
+            mysql.pool.query(newQuery, someEvent.event_id, function (err, newResults) {
                 if (err) {
                     console.log(err);
                 }
-                if (results[0]) {
-                    someEvent.volunteer_count = results[0].vol_count;
+                if (newResults[0]) {
+                    console.log("Displaying event");
+                    console.log(newResults[0]);
+                    console.log(newResults[0].vol_count + " Volunteers");
+                    someEvent.volunteer_count = newResults[0].vol_count;
+                    console.log("someEvent.volunteer_count = " + someEvent.volunteer_count);
+                    console.log(someEvent);
                 } else {
+                    console.log("No volunteers for event");
                     someEvent.volunteer_count = 0;
                 }
+                complete(res, results);
             });
         });
-        
-        context.event = results;
-        res.render('browse-events', context);
+        complete(res, results);
+    });
+
+    function complete(res, results) {
+        callbackCount++;
+        if (callbackCount > 1) {
+            context.event = results;
+            console.log("Printing Context");
+            console.log(context);
+            res.render('browse-events', context);
+        }
+    }
+});
+
+// Volunter signs up for event
+app.post('/add-event-volunteer', function (req, res) {
+    var eventId = req.body['fk_event_id'];
+    var volunteerId = req.body['fk_volunteer_id'];
+    var query = "INSERT INTO Event_Volunteer (fk_event_id, fk_volunteer_id) VALUES (?, ?);";
+    var volunteerParams = [eventId, volunteerId];
+    mysql.pool.query(query, volunteerParams, function (err, results) {
+        if (err) {
+            console.log(err);
+            res.status(400);
+            res.end();
+        }
+        res.status(200).end();
     });
 });
 
