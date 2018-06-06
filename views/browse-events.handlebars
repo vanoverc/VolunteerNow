@@ -18,7 +18,7 @@
                 <input id="vol-id" type="hidden" name="volunteer_id" value="{{volunteer_id}}" />
                 {{#each event}}
                 <div class="event-card">
-                    <input type="hidden" name="event_id" value="{{event_id}}" />
+                    
                     <div class="row">
                         <div class="col-xs-7">
                             <strong>{{date_start}}{{date_end}}</strong>
@@ -37,9 +37,11 @@
                     <div class="row">
                         <div class="col-xs-6" align="center">
                             <button type="button" class="btn browse-event-btn event-details-btn">Details</button>
+                            <input type="hidden" name="event_id" value="{{event_id}}" />
                         </div>
                         <div class="col-xs-6" align="center">
                             <button type="button" class="btn browse-event-btn sign-up-btn">Sign Up</button>
+                            <input type="hidden" name="event_id" value="{{event_id}}" />
                         </div>
                     </div>
                 </div>
@@ -67,8 +69,7 @@
 
         // Add Event Details listener
         $(".event-details-btn").click(function () {
-
-            var eventId = $('#event-id').val();
+            var eventId = $(this).next().val();
             window.location.assign('/event-details/' + eventId);
        
         });
