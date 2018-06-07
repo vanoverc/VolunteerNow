@@ -205,14 +205,14 @@ ALTER TABLE `Volunteer_Account`
 -- Constraints for table `Event`
 --
 ALTER TABLE `Event`
-  ADD CONSTRAINT `Event_ibfk_1` FOREIGN KEY (`fk_organization_id`) REFERENCES `Organization` (`organization_id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `Event_ibfk_1` FOREIGN KEY (`fk_organization_id`) REFERENCES `Organization` (`organization_id`) ON UPDATE CASCADE ON DELETE CASCADE;
 
 --
 -- Constraints for table `Event_Volunteer`
 --
 ALTER TABLE `Event_Volunteer`
-  ADD CONSTRAINT `Event_Volunteer_ibfk_1` FOREIGN KEY (`fk_event_id`) REFERENCES `Event` (`event_id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `Event_Volunteer_ibfk_2` FOREIGN KEY (`fk_volunteer_id`) REFERENCES `Volunteer_Account` (`volunteer_id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `Event_Volunteer_ibfk_1` FOREIGN KEY (`fk_event_id`) REFERENCES `Event` (`event_id`) ON UPDATE CASCADE ON DELETE CASCADE,
+  ADD CONSTRAINT `Event_Volunteer_ibfk_2` FOREIGN KEY (`fk_volunteer_id`) REFERENCES `Volunteer_Account` (`volunteer_id`) ON UPDATE CASCADE ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
