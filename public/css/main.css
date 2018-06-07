@@ -37,8 +37,17 @@
   padding: 10px 0;
 }
 
+#admin-approval-container {
+    background-color: #CD90EA;
+}
+
 .pending-organization {
+    margin-top:10px;
+    margin-bottom:10px;
   padding: 10px 0;
+  padding-left:10px;
+  padding-right:10px;
+  background-color: #ffffff;
 }
 
 #index-container {
@@ -80,5 +89,19 @@
     .vol-login-btn:hover, .vol-login-btn:active, .vol-login-btn:focus {
         color: #CD90EA;
         background-color: #8600C5;
+        border-color: #450364;
+    }
+
+.admin-btn {
+    color: #ffffff;
+    background-color: #8600C5;
+    border-color: #450364;
+    margin: 5px;
+    width: 200px;
+}
+
+    .admin-btn:hover, .admin-btn:active, .admin-btn:focus {
+        color: #ffffff;
+        background-color: #450364;
         border-color: #450364;
     }
