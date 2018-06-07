@@ -41,27 +41,27 @@
   padding: 10px 0;
 }
 
-#index-container{
-  background-color: #F9A0F9;
-  padding-bottom: 20px;
+#index-container {
+    background-color: #CD90EA;
+    padding-bottom: 20px;
 }
 
-.index-h2{
-  color: #6D006D;
+.index-h2 {
+    color: #450364;
 }
 
-.index-btn{
-  color: #6D006D;
-  background-color: #ffffff;
-  border-color: #6D006D;
-  margin:5px;
-  width:175px;
+.index-btn {
+    color: #450364;
+    background-color: #ffffff;
+    border-color: #450364;
+    margin: 5px;
+    width: 200px;
 }
 
     .index-btn:hover, .index-btn:active, .index-btn:focus {
-        color: #6D006D;
-        background-color: #b716b7;
-        border-color: #6D006D;
+        color: #CD90EA;
+        background-color: #8600C5;
+        border-color: #450364;
     }
 
 #vol-sign-in-container {
@@ -70,15 +70,15 @@
 }
 
 .vol-login-btn {
-    color: #061D52;
+    color: #450364;
     background-color: #ffffff;
-    border-color: #061D52;
+    border-color: #450364;
     margin: 5px;
-    width: 175px;
+    width: 200px;
 }
 
     .vol-login-btn:hover, .vol-login-btn:active, .vol-login-btn:focus {
-        color: #ffffff;
-        background-color: #0538AF;
-        border-color: #061D52;
+        color: #CD90EA;
+        background-color: #8600C5;
+        border-color: #450364;
     }
