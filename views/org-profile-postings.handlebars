@@ -3,7 +3,6 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" media="all" href="/css/organization.css">
 </head>
-
 <div id="org-events-container" class="container-fluid">
     <div class="row">
         <div class="col-xs-10 col-xs-offset-1">
@@ -49,6 +48,8 @@
                     </div>
                 </div>
             </div>
+            <button id="cancel-event-btn" class="btn btn-primary cancel-event-btn">Cancel</button>
+            <input type="hidden" name="event_id" value="{{event_id}}" />
         </div> 
     </div>
     {{/each}}
@@ -59,6 +60,22 @@
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script>
+   // Add cancel event listener
+        $(".cancel-event-btn").click(function () {
+            var eventId = $(this).next().val();
+            var myData = {};
+            myData.event = eventId;
+            
+            $.ajax({
+                url: '/org-event-cancel',
+                type: 'POST',
+                data: { event: eventId},
+                success: function (result) {
+                    window.location.reload(true);
+                }
+            });
+        });
+    // Add event listener to view event details
     $(function () {
         $('.org-event-item').click(function () {
             var eventId = $(this).children().first().val();
