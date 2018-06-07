@@ -1,41 +1,40 @@
 <div id="admin-approval-container">
-  {{#if pending_organizations.count}}
-    <h2>Organizations Pending Approval</h2>
-  {{/if}}
-
-  {{#each pending_organizations}}
-    <div class="pending-organization">
-      <p><strong>Organization:</strong> {{this.organization_name}}</p>
-      <p><strong>Contact:</strong> {{this.contact_name}}</p>
-      <p><strong>URL:</strong> {{this.contact_url}}</p>
-
-      <form class="admin-approval-form" action="admin-approve" method="POST">
-        <div class="form-fields-container">
-          <input type="hidden" name="organization_id" value="{{this.organization_id}}">
-          <button type="submit">Approve</button>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-6 col-xs-offset-3 col-md-4 col-md-offset-4">
+                {{#if pending_organizations}}
+                <h2>Organizations Pending Approval</h2>
+                {{/if}}
+                {{#each pending_organizations}}
+                <div class="pending-organization">
+                    <p><strong>Organization:</strong> {{this.organization_name}}</p>
+                    <p><strong>Contact:</strong> {{this.contact_name}}</p>
+                    <p><strong>URL:</strong> {{this.contact_url}}</p>
+                    <form class="admin-approval-form" action="admin-approve" method="POST">
+                        <div class="form-fields-container" align="center">
+                            <input type="hidden" name="organization_id" value="{{this.organization_id}}">
+                            <button type="submit" class="admin-btn">Approve</button>
+                        </div>
+                    </form>
+                </div>
+                {{/each}}
+                {{#if approved_organizations}}
+                <h2>Approved Organizations</h2>
+                {{/if}}
+                {{#each approved_organizations}}
+                <div class="pending-organization">
+                    <p><strong>Organization:</strong> {{this.organization_name}}</p>
+                    <p><strong>Contact:</strong> {{this.contact_name}}</p>
+                    <p><strong>URL:</strong> {{this.contact_url}}</p>
+                    <form class="admin-approval-form" action="admin-reject" method="POST">
+                        <div class="form-fields-container" align="center">
+                            <input type="hidden" name="organization_id" value="{{this.organization_id}}">
+                            <button type="submit" class="btn admin-btn">Revoke</button>
+                        </div>
+                    </form>
+                </div>
+                {{/each}}
+            </div>
         </div>
-      </form>
-
     </div>
-  {{/each}}
-
-  {{#if pending_organizations.count}}
-    <h2>Approved Organizations</h2>
-  {{/if}}
-
-  {{#each approved_organizations}}
-    <div class="pending-organization">
-      <p><strong>Organization:</strong> {{this.organization_name}}</p>
-      <p><strong>Contact:</strong> {{this.contact_name}}</p>
-      <p><strong>URL:</strong> {{this.contact_url}}</p>
-
-      <form class="admin-approval-form" action="admin-reject" method="POST">
-        <div class="form-fields-container">
-          <input type="hidden" name="organization_id" value="{{this.organization_id}}">
-          <button type="submit">Revoke</button>
-        </div>
-      </form>
-
-    </div>
-  {{/each}}
 </div>
