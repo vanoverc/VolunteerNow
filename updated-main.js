@@ -326,11 +326,26 @@ app.get('/org-profile/postings', function (req, res) {
                 console.log(err);
             }
             context.event = results;
-            res.render("org-profile-postings", context);
+            res.render("org-profile/postings", context);
         });
     } else {
         res.redirect('/org-sign-in');
     }
+});
+
+app.post('/org-event-cancel', function (req, res) {
+    var eventId = req.body['event'];
+    var query = "DELETE FROM Event WHERE event_id = ?";
+    var eventParams = [eventId];
+    mysql.pool.query(query, eventParams, function (err, results) {
+        if (err) {
+            console.log(err);
+            res.status(400);
+            res.end();
+        }
+        res.redirect('/org-profile/postings');
+        //res.status(200).end();
+    });
 });
 
 // sign up for volunteer account
