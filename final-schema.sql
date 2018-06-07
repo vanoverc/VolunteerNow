@@ -118,7 +118,7 @@ CREATE TABLE `Organization` (
 --
 
 INSERT INTO `Organization` (`organization_id`, `organization_name`, `organization_password`, `address_num`, `address_street`, `address_state`, `address_zip`, `contact_email`, `contact_phone`, `contact_name`, `contact_url`, `approved`) VALUES
-(1, 'Colin\'s Test Org', 'password', 123, 'Some Street', 'CO', 45678, 'vanoverc@oregonstate.edu', '123-456-7890', 'Colin', 'http://www.google.com', 1);
+(1, "Colin\'s Test Org", 'password', 123, 'Some Street', 'CO', 45678, 'vanoverc@oregonstate.edu', '123-456-7890', 'Colin', 'http://www.google.com', 1);
 
 -- --------------------------------------------------------
 
