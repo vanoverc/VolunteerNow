@@ -24,6 +24,7 @@
                     <th>Contact Phone</th>
                     <th>Contact Name</th>
                     <th>URL</th>
+                    <th>Cancel Event</th>
                 </tr>
             </thead>
             {{#each event}}
@@ -40,6 +41,10 @@
                 <td>{{contact_phone}}</td>
                 <td>{{contact_name}}</td>
                 <td>{{contact_url}}</td>
+                <td>
+                    <button id="cancel-event-btn" class="btn btn-primary cancel-event-btn">Cancel</button>
+                    <input type="hidden" name="event_id" value="{{event_id}}" />
+                </td>
             </tr>
             {{/each}}
         </table>
@@ -50,3 +55,20 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script>
+   // Add cancel event listener
+        $(".cancel-event-btn").click(function () {
+            var eventId = $(this).next().val();
+            var myData = {};
+            myData.event = eventId;
+            
+            $.ajax({
+                url: '/org-event-cancel',
+                type: 'POST',
+                data: { event: eventId},
+                success: function (result) {
+                    window.location.reload(true);
+                }
+            });
+        });
+</script>
