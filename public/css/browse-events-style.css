@@ -1,0 +1,30 @@
+#browse-events-container {
+    background-color: #F9A0F9;
+}
+
+.event-card {
+    border: 1px;
+    border-color: #6D006D;
+    box-shadow: 10px, 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 5px;
+    background-color: #ffffff;
+    color: #6D006D;
+}
+
+.browse-event-h1 {
+    color: #6D006D;
+}
+
+.browse-event-btn {
+    color: #6D006D;
+    background-color: #ffffff;
+    border-color: #6D006D;
+}
+
+.browse-event-btn:hover, .browse-event-btn:active, .browse-event-btn:focus {
+    color: #6D006D;
+    background-color: #b716b7;
+    border-color: #6D006D;
+}

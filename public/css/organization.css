@@ -26,3 +26,16 @@
 .org-sign-in-h2{
     color: #97002B;
   }
+
+#org-events-container {
+    background-color: #CD90EA;
+}
+
+.org-event-item {
+    margin-bottom:15px;
+    background-color: #ffffff;
+}
+
+.org-event-item:hover {
+    cursor:pointer;
+}
