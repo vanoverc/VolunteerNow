@@ -135,6 +135,49 @@ CREATE TABLE `Volunteer_Account` (
   `last_name` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Skill`
+--
+DROP TABLE IF EXISTS `Skill`;
+CREATE TABLE `Skill` (
+  `skill_id` int(10) UNSIGNED NOT NULL,
+  `skill_desc` varchar(255) NOT NULL,
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `Skill`
+--
+
+INSERT INTO `Skill` (`skill_id`, `skill_desc`) VALUES
+(1, 'Food Service'),
+(2, 'Elderly Care'),
+(3, 'Construction'),
+(4, 'Youth Mentorship'),
+(5, 'Cleanup');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Event_Skill`
+--
+DROP TABLE IF EXISTS `Event_Skill`;
+CREATE TABLE `Event_Skill` (
+  `fk_event_id` int(10) UNSIGNED NOT NULL,
+  `fk_skill_id` int(10) UNSIGNED NOT NULL,
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `Event_Skill`
+--
+
+INSERT INTO `Event_Skill` (`fk_event_id`, `fk_skill_id`) VALUES
+(1, 2),
+(2, 5);
+
+-- --------------------------------------------------------
+
 --
 -- Indexes for dumped tables
 --
@@ -170,7 +213,19 @@ ALTER TABLE `Organization`
 --
 ALTER TABLE `Volunteer_Account`
   ADD PRIMARY KEY (`volunteer_id`);
+  
+  --
+-- Indexes for table `Skill`
+--
+ALTER TABLE `Skill`
+  ADD PRIMARY KEY (`skill_id`);
 
+--
+-- Indexes for table `Event_Skill`
+--
+ALTER TABLE `Event_Skill`
+  ADD PRIMARY KEY (`fk_event_id`,`fk_skill_id`);
+  
 --
 -- AUTO_INCREMENT for dumped tables
 --
@@ -198,6 +253,12 @@ ALTER TABLE `Organization`
 --
 ALTER TABLE `Volunteer_Account`
   MODIFY `volunteer_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  
+  --
+-- AUTO_INCREMENT for table `Skill`
+--
+ALTER TABLE `Skill`
+  MODIFY `skill_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
@@ -215,6 +276,14 @@ ALTER TABLE `Event`
 ALTER TABLE `Event_Volunteer`
   ADD CONSTRAINT `Event_Volunteer_ibfk_1` FOREIGN KEY (`fk_event_id`) REFERENCES `Event` (`event_id`) ON UPDATE CASCADE ON DELETE CASCADE,
   ADD CONSTRAINT `Event_Volunteer_ibfk_2` FOREIGN KEY (`fk_volunteer_id`) REFERENCES `Volunteer_Account` (`volunteer_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+COMMIT;
+
+--
+-- Constraints for table `Event_Skill`
+--
+ALTER TABLE `Event_Skill`
+  ADD CONSTRAINT `Event_Skill_ibfk_1` FOREIGN KEY (`fk_event_id`) REFERENCES `Event` (`event_id`) ON UPDATE CASCADE ON DELETE CASCADE,
+  ADD CONSTRAINT `Event_Skill_ibfk_2` FOREIGN KEY (`fk_skill_id`) REFERENCES `Skill` (`skill_id`) ON UPDATE CASCADE ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
