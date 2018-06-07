@@ -315,17 +315,25 @@ app.get('/org-profile/postings', function (req, res) {
     if (req.session.organization_id) {
         var context = {};
         context.id = req.session.organization_id;
-        var query = "SELECT O.organization_name, E.event_name, E.address_num, E.address_street, E.address_state, ";
-        query = query + "E.address_zip, E.min_age, E.date_start, E.date_end, E.event_description, E.contact_email, ";
-        query = query + "E.contact_phone, E.contact_name, E.contact_URL ";
-        query = query + "FROM Organization O INNER JOIN `Event` E ON E.fk_organization_id = O.organization_id ";
-        query = query + "WHERE O.organization_id = ?";
+
+        var query = "SELECT E.event_id, E.event_name, E.address_num, E.address_street, E.address_state, E.address_zip, E.min_age, E.date_start, E.date_end, E.event_description, ";
+        query = query + "E.contact_email, E.contact_phone, E.contact_name, E.contact_url, O.organization_id, O.organization_name, COUNT(EV.fk_volunteer_id) AS vol_count ";
+        query = query + "FROM `Event` E INNER JOIN Organization O ON O.organization_id = E.fk_organization_id LEFT JOIN Event_Volunteer EV ON E.event_id = EV.fk_event_id ";
+        query = query + "WHERE O.organization_id = ? GROUP BY E.event_id ORDER BY E.date_end ASC;";
+
         var inserts = [context.id];
         mysql.pool.query(query, inserts, function (err, results) {
             if (err) {
                 console.log(err);
             }
+            
+            //Format dates
+            results.forEach(function (someEvent) {
+                formatDate(someEvent);
+            });
+            context.org_name = results[0].organization_name;
             context.event = results;
+
             res.render("org-profile-postings", context);
         });
     } else {
@@ -487,6 +495,21 @@ app.post('/volunteer-update', function (req, res) {
     }
 });
 
+function formatDate(someEvent) {
+    var startDateString = someEvent.date_start.toString();
+    var endDateString = someEvent.date_end.toString();
+    //console.log(startDateString);
+    var startDate = startDateString.slice(4, 16);
+    var endDate = endDateString.slice(4, 16);
+    if (startDate == endDate) {
+        endDate = "";
+    } else {
+        endDate = " - " + endDate;
+    }
+    someEvent.date_start = startDate;
+    someEvent.date_end = endDate;
+}
+
 // Display browse events page
 app.get('/browse-events', function (req, res) {
     var callbackCount = 0;
@@ -500,7 +523,7 @@ app.get('/browse-events', function (req, res) {
     var query = "SELECT E.event_id, E.event_name, E.address_num, E.address_street, E.address_state, E.address_zip, E.min_age, E.date_start, E.date_end, E.event_description, ";
     query = query + "E.contact_email, E.contact_phone, E.contact_name, E.contact_url, O.organization_id, O.organization_name, COUNT(EV.fk_volunteer_id) AS vol_count ";
     query = query + "FROM `Event` E INNER JOIN Organization O ON O.organization_id = E.fk_organization_id LEFT JOIN Event_Volunteer EV ON E.event_id = EV.fk_event_id ";
-    query = query + "WHERE E.date_start < (NOW()) AND E.date_end > (NOW()) AND O.approved = 1 GROUP BY E.event_id ORDER BY E.date_end ASC; "
+    query = query + "WHERE E.date_start < (NOW()) AND E.date_end > (NOW()) AND O.approved = 1 GROUP BY E.event_id ORDER BY E.date_end ASC;";
     mysql.pool.query(query, [1], function (err, results) {
         if (err) {
             console.log(err);
@@ -509,6 +532,8 @@ app.get('/browse-events', function (req, res) {
 
         //Format dates
         results.forEach(function (someEvent) {
+            formatDate(someEvent);
+            /*
             var startDateString = someEvent.date_start.toString();
             var endDateString = someEvent.date_end.toString();
             //console.log(startDateString);
@@ -521,6 +546,7 @@ app.get('/browse-events', function (req, res) {
             }
             someEvent.date_start = startDate;
             someEvent.date_end = endDate;
+            */
         });
 
         context.event = results;
