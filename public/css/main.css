@@ -10,7 +10,11 @@
 
 .footer-h4{
   margin:auto;
-  color:#ffffff;
+  color:#f0f0f0;
+}
+
+.white-bg {
+    background-color: #f0f0f0;
 }
 
 /*#header-container, #main-container, #footer-container {
@@ -29,7 +33,7 @@
 }
 
 #title-text{
-  color: #ffffff;
+  color: #f0f0f0;
   padding-top: 10px;
 }
 
@@ -47,7 +51,11 @@
   padding: 10px 0;
   padding-left:10px;
   padding-right:10px;
-  background-color: #ffffff;
+  background-color: #f0f0f0;
+}
+
+.background {
+    background-color: #CD90EA;
 }
 
 #index-container {
@@ -61,7 +69,7 @@
 
 .index-btn {
     color: #450364;
-    background-color: #ffffff;
+    background-color: #f0f0f0;
     border-color: #450364;
     margin: 5px;
     width: 200px;
@@ -80,7 +88,7 @@
 
 .vol-login-btn {
     color: #450364;
-    background-color: #ffffff;
+    background-color: #f0f0f0;
     border-color: #450364;
     margin: 5px;
     width: 200px;
@@ -93,7 +101,7 @@
     }
 
 .admin-btn {
-    color: #ffffff;
+    color: #f0f0f0;
     background-color: #8600C5;
     border-color: #450364;
     margin: 5px;
@@ -101,7 +109,7 @@
 }
 
     .admin-btn:hover, .admin-btn:active, .admin-btn:focus {
-        color: #ffffff;
+        color: #f0f0f0;
         background-color: #450364;
         border-color: #450364;
     }
