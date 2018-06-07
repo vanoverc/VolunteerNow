@@ -37,7 +37,7 @@
   padding: 10px 0;
 }
 
-#admin-approval-container {
+#admin-approval-container, #admin-sign-in-container {
     background-color: #CD90EA;
 }
 
