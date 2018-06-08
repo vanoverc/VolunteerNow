@@ -610,23 +610,29 @@ app.get('/event-details/:id', function (req, res) {
 
 // Organization Edit Event Page
 app.get('/org-event-edit/:id', function (req, res) {
-    var callbackCount = 0;
-    var context = {};
-    context.id = req.params.id;
+    // Only allow if org user
+    if (req.session.organization_id) {
+        var callbackCount = 0;
+        var context = {};
+        context.id = req.params.id;
 
-    getEvent(res, mysql, context, complete);
-    getEventSkills(res, mysql, context, complete);
-    getAllSkills(res, mysql, context, complete);
+        // Data queries
+        getEvent(res, mysql, context, complete);
+        getEventSkills(res, mysql, context, complete);
+        getAllSkills(res, mysql, context, complete);
 
-    function complete() {
-        callbackCount++;
-        if (callbackCount >= 3) {
-            console.log("Rendering org-event-edit");
-            res.render('org-event-edit', context);
+        // Callback funcitno to execute when each query finishes
+        function complete() {
+            callbackCount++;
+            if (callbackCount >= 3) {
+                console.log("Rendering org-event-edit");
+                res.render('org-event-edit', context);
+            }
         }
-    }
-
-    
+    } else {
+        // If not org user, redirect to org sign in
+        res.redirect('/org-sign-in');
+    } 
 });
 
 function getEvent(res, mysql, context, complete) {
@@ -650,7 +656,7 @@ function getEvent(res, mysql, context, complete) {
 
 function getEventSkills(res, mysql, context, complete) {
     console.log("Getting event skills");
-    var query = "SELECT S.skill_desc FROM `Skill` S INNER JOIN `Event_Skill` ES ON ES.fk_skill_id = S.skill_id WHERE ES.fk_event_id = ?";
+    var query = "SELECT S.skill_id, S.skill_desc FROM `Skill` S INNER JOIN `Event_Skill` ES ON ES.fk_skill_id = S.skill_id WHERE ES.fk_event_id = ?";
     var inserts = context.id;
     mysql.pool.query(query, inserts, function (err, results) {
         if (err) {
@@ -659,6 +665,8 @@ function getEventSkills(res, mysql, context, complete) {
         
         if (results[0]) {
             context.skill = results;
+            console.log("Event skills:");
+            console.log(context.skill);
             complete();
         } else {
             res.render('404');
@@ -675,6 +683,148 @@ function getAllSkills(res, mysql, context, complete) {
         }
         context.allSkills = results;
         complete();
+    });
+}
+
+app.post('/event-update', function (req, res) {
+    // only allow volunteer users with a session
+    if (req.session.organization_id) {
+        var callbackCount = 0;
+        var organizationId = req.session.organization_id;
+
+        eventUpdate(req, res, mysql, context, complete);
+
+        function complete() {
+            callbackCount++;
+            if (callbackCount >= 1) {
+                res.render('org-profile-postings', context);
+            }
+        }
+    } else {
+        res.redirect('/org-sign-in')
+    }
+});
+
+function eventUpdate(req, res, mysql, context, complete) {
+    var someAddress = req.body.address;
+    var addressNum = someAddress.slice(0, someAddress.indexOf(' '));
+    var addressStreet = someAddress.substr(someAddress.indexOf(' ') + 1);
+
+    var query = "UPDATE `Event` SET event_name = ?, address_num = ?, address_street = ?, address_state = ?, address_zip = ?, min_age = ?, ";
+    query = query + "date_start = ?, date_end = ?, event_description = ?, contact_phone = ?, contact_email = ?, contact_name = ?, contact_url WHERE event_id = ? ";
+    var eventParams = [ req.body['event_name'], addressNum, addressStreet, req.body['address_zip'], req.body['min_age'], req.body['date_start'], req.body['date_end'], req.body['event_description'], req.body['contact_phone'], req.body['contact_email'], req.body['contact_name'], req.body['contact_url'], req.body['event_id'] ];
+    mysql.pool.query(query, eventParams, function (err, results) {
+        if (err) {
+            console.log(err);
+        }
+        callbackCount = 0;
+
+        if (req.body['all_skills_Food Service']) {
+            query = "INSERT INTO `Event_Skill` (fk_event_id, fk_skill_id) VALUES (?, ?)";
+            var inserts = [req.body['event_id'], req.body['alls_kills_Food Service']];
+            mysql.pool.query(query, inserts, function (err, results) {
+                if (err) {
+                    console.log(err);
+                }
+                allDone(complete);
+            });
+        } else {
+            query = "DELETE FROM `Event_Skill` WHERE sk_skill_id = ?";
+            var inserts = [req.body['all_skills_Food Service']];
+            mysql.pool.query(query, inserts, function (err, results) {
+                if (err) {
+                    console.log(err);
+                }
+                allDone(complete);
+            });
+        }
+
+        if (req.body['all_skills_Elderly Care']) {
+            query = "INSERT INTO `Event_Skill` (fk_event_id, fk_skill_id) VALUES (?, ?)";
+            var inserts = [req.body['event_id'], req.body['all_skills_Elderly Care']];
+            mysql.pool.query(query, inserts, function (err, results) {
+                if (err) {
+                    console.log(err);
+                }
+                allDone(complete);
+            });
+        } else {
+            query = "DELETE FROM `Event_Skill` WHERE sk_skill_id = ?";
+            var inserts = [req.body['all_skills_Elderly Care']];
+            mysql.pool.query(query, inserts, function (err, results) {
+                if (err) {
+                    console.log(err);
+                }
+                allDone(complete);
+            });
+        }
+
+        if (req.body['all_skills_Construction']) {
+            query = "INSERT INTO `Event_Skill` (fk_event_id, fk_skill_id) VALUES (?, ?)";
+            var inserts = [req.body['event_id'], req.body['all_skills_Construction']];
+            mysql.pool.query(query, inserts, function (err, results) {
+                if (err) {
+                    console.log(err);
+                }
+                allDone(complete);
+            });
+        } else {
+            query = "DELETE FROM `Event_Skill` WHERE sk_skill_id = ?";
+            var inserts = [req.body['all_skills_Construction']];
+            mysql.pool.query(query, inserts, function (err, results) {
+                if (err) {
+                    console.log(err);
+                }
+                allDone(complete);
+            });
+        }
+        if (req.body['all_skills_Youth Mentorship']) {
+            query = "INSERT INTO `Event_Skill` (fk_event_id, fk_skill_id) VALUES (?, ?)";
+            var inserts = [req.body['event_id'], req.body['all_skills_Youth Mentorship']];
+            mysql.pool.query(query, inserts, function (err, results) {
+                if (err) {
+                    console.log(err);
+                }
+                allDone(complete);
+            });
+        } else {
+            query = "DELETE FROM `Event_Skill` WHERE sk_skill_id = ?";
+            var inserts = [req.body['all_skills_Youth Mentorship']];
+            mysql.pool.query(query, inserts, function (err, results) {
+                if (err) {
+                    console.log(err);
+                }
+                allDone(complete);
+            });
+        }
+
+        if (req.body['all_skills_Cleanup']) {
+            query = "INSERT INTO `Event_Skill` (fk_event_id, fk_skill_id) VALUES (?, ?)";
+            var inserts = [req.body['event_id'], req.body['all_skills_Cleanup']];
+            mysql.pool.query(query, inserts, function (err, results) {
+                if (err) {
+                    console.log(err);
+                }
+                allDone(complete);
+            });
+        } else {
+            query = "DELETE FROM `Event_Skill` WHERE sk_skill_id = ?";
+            var inserts = [req.body['all_skills_Cleanup']];
+            mysql.pool.query(query, inserts, function (err, results) {
+                if (err) {
+                    console.log(err);
+                }
+                allDone(complete);
+            });
+        }
+
+
+        function allDone(complete) {
+            callbackCount++;
+            if (callbackCount >= 5) {
+                complete();
+            }
+        }
     });
 }
 
