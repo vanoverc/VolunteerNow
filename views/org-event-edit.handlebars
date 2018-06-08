@@ -53,6 +53,17 @@
                         </p>
                     </div>
                 </div>
+                <div class="row">
+                    <h3>Skills</h3>
+                    <table>
+                        {{#each allSkills}}
+                        <td class="skill-checkbox">
+                            <input type="checkbox" name="{{skill_desc}}" value="{{skill_id}}" />
+                            {{skill_desc}}
+                        </td>
+                        {{/each}}
+                    </table>
+                </div>
                 <div align="center">
                     <button class="btn vol-login-btn" type="submit"><strong>Update Event</strong></button>
                 </div>
