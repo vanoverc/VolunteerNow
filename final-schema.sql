@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: classmysql.engr.oregonstate.edu:3306
--- Generation Time: Jun 05, 2018 at 04:34 PM
+-- Generation Time: Jun 07, 2018 at 04:58 PM
 -- Server version: 10.1.22-MariaDB
 -- PHP Version: 7.0.30
 
@@ -21,25 +21,38 @@ SET time_zone = "+00:00";
 --
 -- Database: `cs361_vanoverc`
 --
-CREATE DATABASE IF NOT EXISTS `cs361_vanoverc` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `cs361_vanoverc`;
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `Event_Volunteer`
+-- Table structure for table `Admin_Account`
 --
-DROP TABLE IF EXISTS `Event_Volunteer`;
-CREATE TABLE `Event_Volunteer` (
-  `fk_event_id` int(10) UNSIGNED NOT NULL,
-  `fk_volunteer_id` int(10) UNSIGNED NOT NULL,
-  `status` varchar(255) DEFAULT NULL
+
+DROP TABLE IF EXISTS `Admin_Account`;
+CREATE TABLE `Admin_Account` (
+  `admin_id` int(10) UNSIGNED NOT NULL,
+  `admin_password` varchar(255) NOT NULL,
+  `contact_email` varchar(255) DEFAULT NULL,
+  `contact_phone` varchar(255) DEFAULT NULL,
+  `first_name` varchar(255) DEFAULT NULL,
+  `last_name` varchar(255) DEFAULT NULL,
+  `fk_organization_id` int(10) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `Admin_Account`
+--
+
+INSERT INTO `Admin_Account` (`admin_id`, `admin_password`, `contact_email`, `contact_phone`, `first_name`, `last_name`, `fk_organization_id`) VALUES
+(1, 'password', 'vanoverc@oregonstate.edu', '123-456-7890', 'colin', 'vano', 1),
+(2, 'password', 'admin@example.com', '111-111-1111', 'admin', 'admin', 1);
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `Event`
 --
+
 DROP TABLE IF EXISTS `Event`;
 CREATE TABLE `Event` (
   `event_id` int(10) UNSIGNED NOT NULL,
@@ -70,33 +83,42 @@ INSERT INTO `Event` (`event_id`, `event_name`, `address_num`, `address_street`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `Admin_Account`
+-- Table structure for table `Event_Skill`
 --
-DROP TABLE IF EXISTS `Admin_Account`;
-CREATE TABLE `Admin_Account` (
-  `admin_id` int(10) UNSIGNED NOT NULL,
-  `admin_password` varchar(255) NOT NULL,
-  `contact_email` varchar(255) DEFAULT NULL,
-  `contact_phone` varchar(255) DEFAULT NULL,
-  `first_name` varchar(255) DEFAULT NULL,
-  `last_name` varchar(255) DEFAULT NULL,
-  `fk_organization_id` int(10) UNSIGNED DEFAULT NULL
+
+DROP TABLE IF EXISTS `Event_Skill`;
+CREATE TABLE `Event_Skill` (
+  `fk_event_id` int(10) UNSIGNED NOT NULL,
+  `fk_skill_id` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `Admin_Account`
+-- Dumping data for table `Event_Skill`
 --
 
-INSERT INTO `Admin_Account` (`admin_id`, `admin_password`, `contact_email`, `contact_phone`, `first_name`, `last_name`, `fk_organization_id`) VALUES
-(1, 'password', 'vanoverc@oregonstate.edu', '123-456-7890', 'colin', 'vano', 1),
-(2, 'password', 'admin@example.com', '111-111-1111', 'admin', 'admin', 1);
+INSERT INTO `Event_Skill` (`fk_event_id`, `fk_skill_id`) VALUES
+(1, 2),
+(2, 5);
 
 -- --------------------------------------------------------
 
+--
+-- Table structure for table `Event_Volunteer`
+--
+
+DROP TABLE IF EXISTS `Event_Volunteer`;
+CREATE TABLE `Event_Volunteer` (
+  `fk_event_id` int(10) UNSIGNED NOT NULL,
+  `fk_volunteer_id` int(10) UNSIGNED NOT NULL,
+  `status` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `Organization`
 --
+
 DROP TABLE IF EXISTS `Organization`;
 CREATE TABLE `Organization` (
   `organization_id` int(10) UNSIGNED NOT NULL,
@@ -123,8 +145,32 @@ INSERT INTO `Organization` (`organization_id`, `organization_name`, `organizatio
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `Skill`
+--
+
+DROP TABLE IF EXISTS `Skill`;
+CREATE TABLE `Skill` (
+  `skill_id` int(10) UNSIGNED NOT NULL,
+  `skill_desc` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `Skill`
+--
+
+INSERT INTO `Skill` (`skill_id`, `skill_desc`) VALUES
+(1, 'Food Service'),
+(2, 'Elderly Care'),
+(3, 'Construction'),
+(4, 'Youth Mentorship'),
+(5, 'Cleanup');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `Volunteer_Account`
 --
+
 DROP TABLE IF EXISTS `Volunteer_Account`;
 CREATE TABLE `Volunteer_Account` (
   `volunteer_id` int(10) UNSIGNED NOT NULL,
@@ -134,6 +180,14 @@ CREATE TABLE `Volunteer_Account` (
   `first_name` varchar(255) DEFAULT NULL,
   `last_name` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `Volunteer_Account`
+--
+
+INSERT INTO `Volunteer_Account` (`volunteer_id`, `volunteer_password`, `contact_email`, `contact_phone`, `first_name`, `last_name`) VALUES
+(1, 'password', 'volunteer@example.com', '111-111-1111', 'test', 'volunteer'),
+(2, 'password', 'niceguy@example.com', '111-111-1111', 'nice', 'guy');
 
 --
 -- Indexes for dumped tables
@@ -153,6 +207,13 @@ ALTER TABLE `Event`
   ADD KEY `fk_organization_id` (`fk_organization_id`);
 
 --
+-- Indexes for table `Event_Skill`
+--
+ALTER TABLE `Event_Skill`
+  ADD PRIMARY KEY (`fk_event_id`,`fk_skill_id`),
+  ADD KEY `Event_Skill_ibfk_2` (`fk_skill_id`);
+
+--
 -- Indexes for table `Event_Volunteer`
 --
 ALTER TABLE `Event_Volunteer`
@@ -164,6 +225,12 @@ ALTER TABLE `Event_Volunteer`
 --
 ALTER TABLE `Organization`
   ADD PRIMARY KEY (`organization_id`);
+
+--
+-- Indexes for table `Skill`
+--
+ALTER TABLE `Skill`
+  ADD PRIMARY KEY (`skill_id`);
 
 --
 -- Indexes for table `Volunteer_Account`
@@ -194,10 +261,16 @@ ALTER TABLE `Organization`
   MODIFY `organization_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `Skill`
+--
+ALTER TABLE `Skill`
+  MODIFY `skill_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `Volunteer_Account`
 --
 ALTER TABLE `Volunteer_Account`
-  MODIFY `volunteer_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `volunteer_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
@@ -207,14 +280,21 @@ ALTER TABLE `Volunteer_Account`
 -- Constraints for table `Event`
 --
 ALTER TABLE `Event`
-  ADD CONSTRAINT `Event_ibfk_1` FOREIGN KEY (`fk_organization_id`) REFERENCES `Organization` (`organization_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+  ADD CONSTRAINT `Event_ibfk_1` FOREIGN KEY (`fk_organization_id`) REFERENCES `Organization` (`organization_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `Event_Skill`
+--
+ALTER TABLE `Event_Skill`
+  ADD CONSTRAINT `Event_Skill_ibfk_1` FOREIGN KEY (`fk_event_id`) REFERENCES `Event` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `Event_Skill_ibfk_2` FOREIGN KEY (`fk_skill_id`) REFERENCES `Skill` (`skill_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `Event_Volunteer`
 --
 ALTER TABLE `Event_Volunteer`
-  ADD CONSTRAINT `Event_Volunteer_ibfk_1` FOREIGN KEY (`fk_event_id`) REFERENCES `Event` (`event_id`) ON UPDATE CASCADE ON DELETE CASCADE,
-  ADD CONSTRAINT `Event_Volunteer_ibfk_2` FOREIGN KEY (`fk_volunteer_id`) REFERENCES `Volunteer_Account` (`volunteer_id`) ON UPDATE CASCADE ON DELETE CASCADE;
+  ADD CONSTRAINT `Event_Volunteer_ibfk_1` FOREIGN KEY (`fk_event_id`) REFERENCES `Event` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `Event_Volunteer_ibfk_2` FOREIGN KEY (`fk_volunteer_id`) REFERENCES `Volunteer_Account` (`volunteer_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
