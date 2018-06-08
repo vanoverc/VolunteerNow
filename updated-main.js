@@ -610,39 +610,70 @@ app.get('/event-details/:id', function (req, res) {
 
 // Organization Edit Event Page
 app.get('/org-event-edit/:id', function (req, res) {
+    var callbackCount = 0;
     var context = {};
+    context.id = req.params.id;
+
+    getEvent(res, mysql, context, complete);
+    getEventSkills(res, mysql, context, complete);
+    getAllSkills(res, mysql, context, complete);
+
+    function complete() {
+        callbackCount++;
+        if (callbackCount >= 3) {
+            res.render('org-event-edit', context);
+        }
+    }
+
+    
+});
+
+function getEvent(res, mysql, context, complete) {
     var query = "SELECT E.event_id, E.event_name, E.address_num, E.address_street, E.address_state, E.address_zip, E.min_age, E.date_start, E.date_end, E.event_description, ";
     query = query + "E.contact_email, E.contact_phone, E.contact_name, E.contact_url, O.organization_id, O.organization_name, COUNT(EV.fk_volunteer_id) AS vol_count ";
     query = query + "FROM `Event` E INNER JOIN Organization O ON O.organization_id = E.fk_organization_id LEFT JOIN Event_Volunteer EV ON E.event_id = EV.fk_event_id ";
     query = query + "WHERE E.event_id = ?";
-    var inserts = [req.params.id];
+    var inserts = context.id;
     mysql.pool.query(query, inserts, function (err, results) {
         if (err) {
             console.log(err);
         }
         if (results[0]) {
             context.event = results[0];
-
-            // Format Dates
-            /*var startDateString = context.event.date_start.toString();
-            var endDateString = context.event.date_end.toString();
-            //console.log(startDateString);
-            var startDate = startDateString.slice(4, 16);
-            var endDate = endDateString.slice(4, 16);
-            if (startDate == endDate) {
-                endDate = "";
-            } else {
-                endDate = " - " + endDate;
-            }
-            context.event.date_start = startDate;
-            context.event.date_end = endDate;
-            */
-            res.render('org-event-edit', context);
+            complete();
         } else {
             res.render('404');
         }
     });
-});
+}
+
+function getEventSkills(res, mysql, context, complete) {
+    var query = "SELECT S.skill_desc FROM `Skill` S INNER JOIN `Event_Skill` ES ON ES.fk_skill_id = S.skill_id WHERE ES.fk_event_id = ?";
+    var inserts = context.id;
+    mysql.pool.query(query, inserts, function (err, results) {
+        if (err) {
+            console.log(err);
+        }
+        if (results[0]) {
+            context.skill = results[0];
+            complete();
+        } else {
+            res.render('404');
+        }
+    });
+}
+
+function getAllSkills(res, mysql, context, complete) {
+    var query = "SELECT skill_id, skill_desc FROM `Skill` WHERE ?";
+    var inserts = 1;
+    mysql.pool.query(query, inserts, function (err, results) {
+        if (err) {
+            console.log(err);
+        }
+        context.allSkills = results;
+        complete();
+    });
+}
 
 // start server
 app.listen(6879, function () {
