@@ -3,7 +3,7 @@
         <div class="col-xs-10 col-xs-offset-1 col-md-6 col-md-offset-3 white-bg">
             <h1>Edit Event</h1>
             <h2>{{event.organization_name}}</h2>
-            <form action="update-event" method="POST">
+            <form action="event-update" method="post">
                 <div class="row">
                     <div class="col-xs-7">
                         <h3>Event Name: <input type="text" name="event_name" value="{{event.event_name}}" /></h3>
@@ -49,7 +49,7 @@
                             <br />
                             Contact Email: <input type="email" name="contact_email" value="{{event.contact_email}}" />
                             <br />
-                            Contact URL: <input type="url" name="address" value="{{event.contact_url}}" />
+                            Contact URL: <input type="url" name="contact_url" value="{{event.contact_url}}" />
                         </p>
                     </div>
                 </div>
@@ -57,13 +57,16 @@
                     <h3>Skills</h3>
                     <table>
                         {{#each allSkills}}
-                        <td class="skill-checkbox">
-                            <input type="checkbox" id="{{skill_dec}}" name="{{skill_desc}}" value="{{skill_id}}" />
-                            {{skill_desc}}
-                        </td>
+                        <input type="checkbox" id="all_skills_{{skill_id}}" name="all_skills_{{skill_desc}}" value="{{skill_id}}" />{{skill_desc}}
                         {{/each}}
                     </table>
                 </div>
+                <div id="selected_skills">
+                    {{#each skill}}
+                    <input type="hidden" id="selected_skills_{{skill_id}}" name="selected_skills_{{skill_desc}}" value="all_skills_{{skill_id}}" />
+                    {{/each}}
+                </div>
+                <input type="hidden" name="event_id" value="{{event.event_id}}"
                 <div align="center">
                     <button class="btn vol-login-btn" type="submit"><strong>Update Event</strong></button>
                 </div>
@@ -80,12 +83,16 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script>
     console.log("In script");
+    $(function () {
+        console.log("Document Loaded");
 
-    var someSkills = {{ skill }};
-    console.log(someSkills);
+        $('#selected_skills').children().each(function () {
+            var selectedSkill = "#" + $(this).val();
+            console.log(selectedSkill);
+            $(selectedSkill).attr('checked', 'checked');
+        });
+    });
+    
 
-    function checkBoxes(someSkills){
-        console.log("checkBoxes() started");
-        console.log(someSkills);
-    }
+    
 </script>
