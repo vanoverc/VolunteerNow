@@ -621,6 +621,7 @@ app.get('/org-event-edit/:id', function (req, res) {
     function complete() {
         callbackCount++;
         if (callbackCount >= 3) {
+            console.log("Rendering org-event-edit");
             res.render('org-event-edit', context);
         }
     }
@@ -648,14 +649,16 @@ function getEvent(res, mysql, context, complete) {
 }
 
 function getEventSkills(res, mysql, context, complete) {
+    console.log("Getting event skills");
     var query = "SELECT S.skill_desc FROM `Skill` S INNER JOIN `Event_Skill` ES ON ES.fk_skill_id = S.skill_id WHERE ES.fk_event_id = ?";
     var inserts = context.id;
     mysql.pool.query(query, inserts, function (err, results) {
         if (err) {
             console.log(err);
         }
+        
         if (results[0]) {
-            context.skill = results[0];
+            context.skill = results;
             complete();
         } else {
             res.render('404');
