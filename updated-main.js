@@ -232,7 +232,7 @@ app.post('/org-sign-in', function (req, res) {
 });
 
 // Display Organization Profile page
-app.get('/org-profile/', function (req, res) {
+app.get('/org-profile', function (req, res) {
     if (req.session.organization_id) {
         console.log("Displaying Ogranization Profile");
         var context = {};
@@ -459,7 +459,7 @@ app.get('/volunteer-edit', function (req, res) {
         var context = {};
         context.volunteer_id = req.session.volunteer_id;
 
-        var query = "SELECT first_name, last_name, contact_phone, contact_email, password FROM Volunteer_Account WHERE volunteer_id = ?";
+        var query = "SELECT first_name, last_name, contact_phone, contact_email, volunteer_password FROM Volunteer_Account WHERE volunteer_id = ?";
         mysql.pool.query(query, [context.volunteer_id], function (error, results) {
             if (error) {
                 console.log(JSON.stringify(error))
@@ -474,7 +474,7 @@ app.get('/volunteer-edit', function (req, res) {
                     context.volunteer_last_name = volunteer.last_name;
                     context.volunteer_phone = volunteer.contact_phone;
                     context.volunteer_email = volunteer.contact_email;
-                    context.volunteer_password = volunteer.password;
+                    context.volunteer_password = volunteer.volunteer_password;
 
                     res.render('volunteer-edit', context);
                 }
@@ -496,7 +496,7 @@ app.post('/volunteer-update', function (req, res) {
         var email = req.body['volunteer_email'];
         var password = req.body['volunteer_password'];
 
-        var query = "UPDATE Volunteer_Account SET first_name = ?, last_name = ?, contact_phone = ?, contact_email = ?, password = ? WHERE volunteer_id = ? ";
+        var query = "UPDATE Volunteer_Account SET first_name = ?, last_name = ?, contact_phone = ?, contact_email = ?, volunteer_password = ? WHERE volunteer_id = ? ";
         var volunteerParams = [req.body['volunteer_first_name'], req.body['volunteer_last_name'], req.body['volunteer_phone_number'], req.body['volunteer_email'], req.body['volunteer_password'], req.session.volunteer_id];
         mysql.pool.query(query, volunteerParams, function (err, results) {
             if (err) {
@@ -608,33 +608,6 @@ app.get('/event-details/:id', function (req, res) {
     });
 });
 
-// Organization Edit Event Page
-app.get('/org-event-edit/:id', function (req, res) {
-    // Only allow if org user
-    if (req.session.organization_id) {
-        var callbackCount = 0;
-        var context = {};
-        context.id = req.params.id;
-
-        // Data queries
-        getEvent(res, mysql, context, complete);
-        getEventSkills(res, mysql, context, complete);
-        getAllSkills(res, mysql, context, complete);
-
-        // Callback funcitno to execute when each query finishes
-        function complete() {
-            callbackCount++;
-            if (callbackCount >= 3) {
-                console.log("Rendering org-event-edit");
-                res.render('org-event-edit', context);
-            }
-        }
-    } else {
-        // If not org user, redirect to org sign in
-        res.redirect('/org-sign-in');
-    } 
-});
-
 function getEvent(res, mysql, context, complete) {
     var query = "SELECT E.event_id, E.event_name, E.address_num, E.address_street, E.address_state, E.address_zip, E.min_age, E.date_start, E.date_end, E.event_description, ";
     query = query + "E.contact_email, E.contact_phone, E.contact_name, E.contact_url, O.organization_id, O.organization_name, COUNT(EV.fk_volunteer_id) AS vol_count ";
@@ -686,26 +659,36 @@ function getAllSkills(res, mysql, context, complete) {
     });
 }
 
-app.post('/event-update', function (req, res) {
-    // only allow volunteer users with a session
+// Organization Edit Event Page
+app.get('/org-event-edit/:id', function (req, res) {
+    // Only allow if org user
     if (req.session.organization_id) {
         var callbackCount = 0;
-        var organizationId = req.session.organization_id;
+        var context = {};
+        context.id = req.params.id;
 
-        eventUpdate(req, res, mysql, context, complete);
+        // Data queries
+        getEvent(res, mysql, context, complete);
+        getEventSkills(res, mysql, context, complete);
+        getAllSkills(res, mysql, context, complete);
 
+        // Callback funcitno to execute when each query finishes
         function complete() {
             callbackCount++;
-            if (callbackCount >= 1) {
-                res.render('org-profile-postings', context);
+            if (callbackCount >= 3) {
+                console.log("Rendering org-event-edit");
+                res.render('org-event-edit', context);
+
             }
         }
     } else {
-        res.redirect('/org-sign-in')
-    }
+        // If not org user, redirect to org sign in
+        res.redirect('/org-sign-in');
+    } 
 });
 
 function eventUpdate(req, res, mysql, context, complete) {
+
     var someAddress = req.body.address;
     var addressNum = someAddress.slice(0, someAddress.indexOf(' '));
     var addressStreet = someAddress.substr(someAddress.indexOf(' ') + 1);
@@ -721,7 +704,7 @@ function eventUpdate(req, res, mysql, context, complete) {
 
         if (req.body['all_skills_Food Service']) {
             query = "INSERT INTO `Event_Skill` (fk_event_id, fk_skill_id) VALUES (?, ?)";
-            var inserts = [req.body['event_id'], req.body['alls_kills_Food Service']];
+            var inserts = [req.body['event_id'], req.body['all_skills_Food Service']];
             mysql.pool.query(query, inserts, function (err, results) {
                 if (err) {
                     console.log(err);
@@ -729,7 +712,7 @@ function eventUpdate(req, res, mysql, context, complete) {
                 allDone(complete);
             });
         } else {
-            query = "DELETE FROM `Event_Skill` WHERE sk_skill_id = ?";
+            query = "DELETE FROM `Event_Skill` WHERE fk_skill_id = ?";
             var inserts = [req.body['all_skills_Food Service']];
             mysql.pool.query(query, inserts, function (err, results) {
                 if (err) {
@@ -749,7 +732,7 @@ function eventUpdate(req, res, mysql, context, complete) {
                 allDone(complete);
             });
         } else {
-            query = "DELETE FROM `Event_Skill` WHERE sk_skill_id = ?";
+            query = "DELETE FROM `Event_Skill` WHERE fk_skill_id = ?";
             var inserts = [req.body['all_skills_Elderly Care']];
             mysql.pool.query(query, inserts, function (err, results) {
                 if (err) {
@@ -769,7 +752,7 @@ function eventUpdate(req, res, mysql, context, complete) {
                 allDone(complete);
             });
         } else {
-            query = "DELETE FROM `Event_Skill` WHERE sk_skill_id = ?";
+            query = "DELETE FROM `Event_Skill` WHERE fk_skill_id = ?";
             var inserts = [req.body['all_skills_Construction']];
             mysql.pool.query(query, inserts, function (err, results) {
                 if (err) {
@@ -788,7 +771,7 @@ function eventUpdate(req, res, mysql, context, complete) {
                 allDone(complete);
             });
         } else {
-            query = "DELETE FROM `Event_Skill` WHERE sk_skill_id = ?";
+            query = "DELETE FROM `Event_Skill` WHERE fk_skill_id = ?";
             var inserts = [req.body['all_skills_Youth Mentorship']];
             mysql.pool.query(query, inserts, function (err, results) {
                 if (err) {
@@ -808,7 +791,7 @@ function eventUpdate(req, res, mysql, context, complete) {
                 allDone(complete);
             });
         } else {
-            query = "DELETE FROM `Event_Skill` WHERE sk_skill_id = ?";
+            query = "DELETE FROM `Event_Skill` WHERE fk_skill_id = ?";
             var inserts = [req.body['all_skills_Cleanup']];
             mysql.pool.query(query, inserts, function (err, results) {
                 if (err) {
@@ -827,8 +810,30 @@ function eventUpdate(req, res, mysql, context, complete) {
         }
     });
 }
+app.post('/event-update', function (req, res) {
+    // only allow volunteer users with a session
+    if (req.session.organization_id) {
+        var callbackCount = 0;
+	var context = {};
+        context.id = req.session.organization_id;
 
+        // Data queries
+        //         getEvent(res, mysql, context, complete);
+        //                 getEventSkills(res, mysql, context, complete);
+        //                         getAllSkills(res, mysql, context, complete);
+        eventUpdate(req, res, mysql, context, complete);
+
+        function complete() {
+            callbackCount++;
+            if (callbackCount >= 1) {
+                res.render('org-profile-postings', context);
+            }
+        }
+    } else {
+        res.redirect('/org-sign-in')
+    }
+});
 // start server
-app.listen(6879, function () {
-    console.log('Server started on port 6879; press Ctrl-C to terminate.');
+app.listen(6889, function () {
+    console.log('Server started on port 6889; press Ctrl-C to terminate.');
 });
