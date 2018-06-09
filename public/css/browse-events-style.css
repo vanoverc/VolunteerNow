@@ -1,5 +1,5 @@
 #browse-events-container {
-    background-color: #F9A0F9;
+    background-color: #CD90EA;
 }
 
 .event-card {
@@ -14,17 +14,17 @@
 }
 
 .browse-event-h1 {
-    color: #6D006D;
+    color: #450364;
 }
 
 .browse-event-btn {
-    color: #6D006D;
-    background-color: #ffffff;
-    border-color: #6D006D;
+    color: #450364;
+    background-color: #f0f0f0;
+    border-color: #450364;
 }
 
-.browse-event-btn:hover, .browse-event-btn:active, .browse-event-btn:focus {
-    color: #6D006D;
-    background-color: #b716b7;
-    border-color: #6D006D;
-}
+    .browse-event-btn:hover, .browse-event-btn:active, .browse-event-btn:focus {
+        color: #F0F0F0;
+        background-color: #6E1D94;
+        border-color: #450364;
+    }
