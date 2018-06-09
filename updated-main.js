@@ -256,7 +256,7 @@ app.get('/org-profile', function (req, res) {
 });
 
 // Display Edit Organization page
-app.get('/org-profile/edit/', function (req, res) {
+app.get('/org-profile-edit/', function (req, res) {
     if (req.session.organization_id) {
         var context = {};
         context.organization_id = req.session.organization_id;
@@ -311,7 +311,7 @@ app.post('/update-organization', function (req, res) {
 });
 
 // View Organization Events Postings
-app.get('/org-profile/postings', function (req, res) {
+app.get('/org-profile-postings', function (req, res) {
     if (req.session.organization_id) {
         var context = {};
         context.id = req.session.organization_id;
@@ -351,7 +351,7 @@ app.post('/org-event-cancel', function (req, res) {
             res.status(400);
             res.end();
         }
-        res.redirect('/org-profile/postings');
+        res.redirect('/org-profile-postings');
         //res.status(200).end();
     });
 });
@@ -618,6 +618,7 @@ function getEvent(res, mysql, context, complete) {
         if (err) {
             console.log(err);
         }
+        console.log(results[0]);
         if (results[0]) {
             context.event = results[0];
             complete();
@@ -672,13 +673,11 @@ app.get('/org-event-edit/:id', function (req, res) {
         getEventSkills(res, mysql, context, complete);
         getAllSkills(res, mysql, context, complete);
 
-        // Callback funcitno to execute when each query finishes
+        // Callback funciton to execute when each query finishes
         function complete() {
             callbackCount++;
             if (callbackCount >= 3) {
-                console.log("Rendering org-event-edit");
                 res.render('org-event-edit', context);
-
             }
         }
     } else {
@@ -688,20 +687,22 @@ app.get('/org-event-edit/:id', function (req, res) {
 });
 
 function eventUpdate(req, res, mysql, context, complete) {
-
+    // Parse address into database values
     var someAddress = req.body.address;
     var addressNum = someAddress.slice(0, someAddress.indexOf(' '));
     var addressStreet = someAddress.substr(someAddress.indexOf(' ') + 1);
 
+    // Update event
     var query = "UPDATE `Event` SET event_name = ?, address_num = ?, address_street = ?, address_state = ?, address_zip = ?, min_age = ?, ";
-    query = query + "date_start = ?, date_end = ?, event_description = ?, contact_phone = ?, contact_email = ?, contact_name = ?, contact_url WHERE event_id =? ";
-    var eventParams = [ req.body['event_name'], addressNum, addressStreet, req.body['address_zip'], req.body['min_age'], req.body['date_start'], req.body['date_end'], req.body['event_description'], req.body['contact_phone'], req.body['contact_email'], req.body['contact_name'], req.body['contact_url'], req.body['event_id'] ];
+    query = query + "date_start = ?, date_end = ?, event_description = ?, contact_phone = ?, contact_email = ?, contact_name = ?, contact_url = ? WHERE event_id = ? ";
+    var eventParams = [req.body['event_name'], addressNum, addressStreet, req.body['address_state'], req.body['address_zip'], req.body['min_age'], req.body['date_start'], req.body['date_end'], req.body['event_description'], req.body['contact_phone'], req.body['contact_email'], req.body['contact_name'], req.body['contact_url'], req.body['event_id']];
+    // Submit SQL query to update event
     mysql.pool.query(query, eventParams, function (err, results) {
         if (err) {
             console.log(err);
         }
         callbackCount = 0;
-
+        // Update all related skills
         if (req.body['all_skills_Food Service']) {
             query = "INSERT INTO `Event_Skill` (fk_event_id, fk_skill_id) VALUES (?, ?)";
             var inserts = [req.body['event_id'], req.body['all_skills_Food Service']];
@@ -803,8 +804,10 @@ function eventUpdate(req, res, mysql, context, complete) {
 
 
         function allDone(complete) {
+            console.log("All done");
             callbackCount++;
             if (callbackCount >= 5) {
+                console.log("Returning")
                 complete();
             }
         }
@@ -818,33 +821,12 @@ app.post('/event-update', function (req, res) {
         context.id = req.session.organization_id;
 
         // Data queries
-        //         getEvent(res, mysql, context, complete);
-        //                 getEventSkills(res, mysql, context, complete);
-        //                         getAllSkills(res, mysql, context, complete);
         eventUpdate(req, res, mysql, context, complete);
 
-
-
+        // Callback funciton to run when queries complete
         function complete() {
- var query = "SELECT E.event_id, E.event_name, E.address_num, E.address_street, E.address_state, E.address_zip, E.min_age, E.date_start, E.date_end, E.event_description, ";
-        query = query + "E.contact_email, E.contact_phone, E.contact_name, E.contact_url, O.organization_id, O.organization_name, COUNT(EV.fk_volunteer_id) AS vol_count ";
-        query = query + "FROM `Event` E INNER JOIN Organization O ON O.organization_id = E.fk_organization_id LEFT JOIN Event_Volunteer EV ON E.event_id = EV.fk_event_id ";
-        query = query + "WHERE O.organization_id = ? GROUP BY E.event_id ORDER BY E.date_end ASC;";
-
-        var inserts = [context.id];
-        mysql.pool.query(query, inserts, function (err, results) {
-            if (err) {
-                console.log(err);
-            }
-		 results.forEach(function (someEvent) {
-                formatDate(someEvent);
-            });
-            context.org_name = results[0].organization_name;
-            context.event = results;
-
-            res.render("org-profile-postings", context);
-        });            
-
+            // Navigate to the Organization Postings page
+            res.redirect("/org-profile-postings");
         }
     } else {
         res.redirect('/org-sign-in')
