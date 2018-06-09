@@ -35,3 +35,11 @@
 .org-event-item:hover {
     cursor:pointer;
 }
+
+#org-profile-container {
+    background-color: #CD90EA;
+}
+
+#org-profile-body {
+    background-color: #F0F0F0;
+}
