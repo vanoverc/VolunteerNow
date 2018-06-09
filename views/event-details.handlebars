@@ -1,35 +1,70 @@
-<div class="container-fluid">
-    <h1>Event Details</h1>
-    <h2>{{event.organization_name}}</h2>
-    <div class="row">
-        <div class="col-xs-8">
-            <h3>{{event.event_name}}</h3>
-        </div>
-        <div class="col-xs-4">
-            <strong>{{event.date_start}}{{event.date_end}}</strong>
-        </div>
+<head>
+    <link rel="stylesheet" type="text/css" media="all" href="/css/main.css">
+    <link rel="stylesheet" type="text/css" media="all" href="/css/browse-events-style.css">
+</head>
 
-    </div>
-    <p><strong>Description</strong></p>
-    <p>{{event.event_description}}</p>
-    <p><strong>Minimum Age:</strong> {{event.min_age}}+</p>
-    <div class="row">
-        <div class="col-xs-6">
-            <p><strong>Address</strong></p>
-            <p>{{event.address_num}} {{event.address_street}}
-            <br />
-            {{event.address_state}} {{event.address_zip}}
-            </p>
-        </div>
-        <div class="col-xs-6">
-            <p><strong>Contact Information</strong></p>
-            <p>
-                {{event.contact_name}}
-                <br />
-                {{event.contact_phone}} {{event.contact_email}}
-                <br />
-                {{event.contact_url}}
-            </p>
+<div id="browse-events-container" class="container-fluid background">
+    <div id="browse-type-menu" class="row">
+        <div class="col-xs-6 col-md-4 col-md-offset-4 background-container">
+            <h1>Event Details</h1>
+            <h2>{{event.organization_name}}</h2>
+            <div class="row">
+                <div class="col-xs-8">
+                    <h3>{{event.event_name}}</h3>
+                </div>
+                <div class="col-xs-4">
+                    <strong>{{event.date_start}}{{event.date_end}}</strong>
+                </div>
+
+            </div>
+            <p><strong>Description</strong></p>
+            <p>{{event.event_description}}</p>
+            <p><strong>Minimum Age:</strong> {{event.min_age}}+</p>
+            <div class="row">
+                <div class="col-xs-6">
+                    <p><strong>Address</strong></p>
+                    <p>
+                        {{event.address_num}} {{event.address_street}}
+                        <br />
+                        {{event.address_state}} {{event.address_zip}}
+                    </p>
+                </div>
+                <div class="col-xs-6">
+                    <p><strong>Contact Information</strong></p>
+                    <p>
+                        {{event.contact_name}}
+                        <br />
+                        {{event.contact_phone}} {{event.contact_email}}
+                        <br />
+                        {{event.contact_url}}
+                    </p>
+                </div>
+            </div>
+            <div class="col-xs-6 col-xs-offset-3" align="center" style="margin-bottom: 10px">
+                <button type="button" class="btn browse-event-btn sign-up-btn"><strong>Sign Up</strong></button>
+                <input type="hidden" name="event_id" value="{{event_id}}" />
+            </div>
         </div>
     </div>
 </div>
+
+<script>
+    // Add Signup event listener
+    $(".sign-up-btn").click(function () {
+
+        var eventId = $(this).next().val();
+        var volunteerId = $('#vol-id').val();
+        var myData = {};
+        myData.fk_event_id = eventId;
+        myData.fk_volunteer_id = volunteerId;
+
+        $.ajax({
+            url: '/add-event-volunteer',
+            type: 'POST',
+            data: { fk_event_id: eventId, fk_volunteer_id: volunteerId },
+            success: function (result) {
+                window.location.reload(true);
+            }
+        });
+    });
+</script>

@@ -1,21 +1,34 @@
-<div id="org-profile-edit-container">
-    <div id="org-profile-edit-heading">
-        <h1>Edit Organization</h1>
-        <h2>{{org.organization_name}}</h2>
-    </div>
-    <div id="org-profile-edit-body">
-        <form id="edit-organization" action="/update-organization/" method="post">
-            <fieldset>
-                <input type="hidden" name="organization_id" value="{{organization_id}}"/>
-                <p>Street Address: <input type="text" name="address" value="{{org.address_num}} {{org.address_street}}"/></p>
-                <p>State: <input type="text" name="address_state" value="{{org.address_state}}"/></p>
-                <p>Zip: <input type="text" name="address_zip" value="{{org.address_zip}}"/></p>
-                <p>E-mail: <input type="text" name="contact_email" value="{{org.contact_email}}"/></p>
-                <p>Phone: <input type="text" name="contact_phone" value="{{org.contact_phone}}"/></p>
-                <p>Primary Contact: <input type="text" name="contact_name" value="{{org.contact_name}}"/></p>
-                <p>URL: <input type="text" name="contact_url" value="{{org.contact_url}}"/></p>
-            </fieldset>
-            <input type="submit" value="Save Changes"> 
-        </form>
+<head>
+    <!-- Bootstrap Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="all" href="/css/organization.css">
+    <link rel="stylesheet" type="text/css" media="all" href="/css/main.css">
+</head>
+
+<div id="browse-events-container" class="container-fluid background">
+    <div id="browse-type-menu" class="row">
+        <div class="col-xs-6 col-md-4 col-md-offset-4" align="center">
+            <div id="org-profile-edit-container">
+                <div id="org-profile-edit-heading">
+                    <h1>Edit Organization</h1>
+                    <h2>{{org.organization_name}}</h2>
+                </div>
+                <div id="org-profile-edit-body">
+                    <form id="edit-organization" action="/update-organization/" method="post">
+                        <fieldset>
+                            <input type="hidden" name="organization_id" value="{{organization_id}}" />
+                            <p>Street Address: <input type="text" name="address" value="{{org.address_num}} {{org.address_street}}" /></p>
+                            <p>State: <input type="text" name="address_state" value="{{org.address_state}}" /></p>
+                            <p>Zip: <input type="text" name="address_zip" value="{{org.address_zip}}" /></p>
+                            <p>E-mail: <input type="text" name="contact_email" value="{{org.contact_email}}" /></p>
+                            <p>Phone: <input type="text" name="contact_phone" value="{{org.contact_phone}}" /></p>
+                            <p>Primary Contact: <input type="text" name="contact_name" value="{{org.contact_name}}" /></p>
+                            <p>URL: <input type="text" name="contact_url" value="{{org.contact_url}}" /></p>
+                        </fieldset>
+                        <input class="btn index-btn" type="submit" value="Save Changes">
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
