@@ -694,7 +694,7 @@ function eventUpdate(req, res, mysql, context, complete) {
     var addressStreet = someAddress.substr(someAddress.indexOf(' ') + 1);
 
     var query = "UPDATE `Event` SET event_name = ?, address_num = ?, address_street = ?, address_state = ?, address_zip = ?, min_age = ?, ";
-    query = query + "date_start = ?, date_end = ?, event_description = ?, contact_phone = ?, contact_email = ?, contact_name = ?, contact_url WHERE event_id = ? ";
+    query = query + "date_start = ?, date_end = ?, event_description = ?, contact_phone = ?, contact_email = ?, contact_name = ?, contact_url WHERE event_id =? ";
     var eventParams = [ req.body['event_name'], addressNum, addressStreet, req.body['address_zip'], req.body['min_age'], req.body['date_start'], req.body['date_end'], req.body['event_description'], req.body['contact_phone'], req.body['contact_email'], req.body['contact_name'], req.body['contact_url'], req.body['event_id'] ];
     mysql.pool.query(query, eventParams, function (err, results) {
         if (err) {
@@ -823,11 +823,28 @@ app.post('/event-update', function (req, res) {
         //                         getAllSkills(res, mysql, context, complete);
         eventUpdate(req, res, mysql, context, complete);
 
+
+
         function complete() {
-            callbackCount++;
-            if (callbackCount >= 1) {
-                res.render('org-profile-postings', context);
+ var query = "SELECT E.event_id, E.event_name, E.address_num, E.address_street, E.address_state, E.address_zip, E.min_age, E.date_start, E.date_end, E.event_description, ";
+        query = query + "E.contact_email, E.contact_phone, E.contact_name, E.contact_url, O.organization_id, O.organization_name, COUNT(EV.fk_volunteer_id) AS vol_count ";
+        query = query + "FROM `Event` E INNER JOIN Organization O ON O.organization_id = E.fk_organization_id LEFT JOIN Event_Volunteer EV ON E.event_id = EV.fk_event_id ";
+        query = query + "WHERE O.organization_id = ? GROUP BY E.event_id ORDER BY E.date_end ASC;";
+
+        var inserts = [context.id];
+        mysql.pool.query(query, inserts, function (err, results) {
+            if (err) {
+                console.log(err);
             }
+		 results.forEach(function (someEvent) {
+                formatDate(someEvent);
+            });
+            context.org_name = results[0].organization_name;
+            context.event = results;
+
+            res.render("org-profile-postings", context);
+        });            
+
         }
     } else {
         res.redirect('/org-sign-in')
