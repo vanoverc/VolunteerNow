@@ -1,9 +1,16 @@
+<head>
+    <!-- Bootstrap Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="all" href="/css/organization.css">
+    <link rel="stylesheet" type="text/css" media="all" href="/css/main.css">
+</head>
+
 <div class="container-fluid background">
     <div class="row">
         <div class="col-xs-10 col-xs-offset-1 col-md-6 col-md-offset-3 white-bg">
             <h1>Edit Event</h1>
             <h2>{{event.organization_name}}</h2>
-            <form action="event-update" method="post">
+            <form action="/event-update" method="post">
                 <div class="row">
                     <div class="col-xs-7">
                         <h3>Event Name: <input type="text" name="event_name" value="{{event.event_name}}" /></h3>

@@ -1,8 +1,9 @@
 <head>
+    <link rel="stylesheet" type="text/css" media="all" href="/css/main.css">
     <link rel="stylesheet" type="text/css" media="all" href="/css/browse-events-style.css">
 </head>
 
-<div id="browse-events-container" class="container-fluid">
+<div id="browse-events-container" class="container-fluid background">
     <div id="browse-type-menu" class="row">
         <div class="col-xs-6 col-md-3 col-md-offset-3" align="center">
             <div id="list-view" class="browse-type-btn">List View</div>
@@ -36,11 +37,11 @@
                     </div>
                     <div class="row">
                         <div class="col-xs-6" align="center">
-                            <button type="button" class="btn browse-event-btn event-details-btn">Details</button>
+                            <button type="button" class="btn browse-event-btn event-details-btn"><strong>Details</strong></button>
                             <input type="hidden" name="event_id" value="{{event_id}}" />
                         </div>
                         <div class="col-xs-6" align="center">
-                            <button type="button" class="btn browse-event-btn sign-up-btn">Sign Up</button>
+                            <button type="button" class="btn browse-event-btn sign-up-btn"><strong>Sign Up</strong></button>
                             <input type="hidden" name="event_id" value="{{event_id}}" />
                         </div>
                     </div>
