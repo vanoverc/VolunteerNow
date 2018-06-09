@@ -541,7 +541,7 @@ app.get('/browse-events', function (req, res) {
     var query = "SELECT E.event_id, E.event_name, E.address_num, E.address_street, E.address_state, E.address_zip, E.min_age, E.date_start, E.date_end, E.event_description, ";
     query = query + "E.contact_email, E.contact_phone, E.contact_name, E.contact_url, O.organization_id, O.organization_name, COUNT(EV.fk_volunteer_id) AS vol_count ";
     query = query + "FROM `Event` E INNER JOIN Organization O ON O.organization_id = E.fk_organization_id LEFT JOIN Event_Volunteer EV ON E.event_id = EV.fk_event_id ";
-    query = query + "WHERE E.date_start < (NOW()) AND E.date_end > (NOW()) AND O.approved = 1 GROUP BY E.event_id ORDER BY E.date_end ASC;";
+    query = query + "WHERE E.date_end > (NOW()) AND O.approved = 1 GROUP BY E.event_id ORDER BY E.date_end ASC;";
     mysql.pool.query(query, [1], function (err, results) {
         if (err) {
             console.log(err);
