@@ -326,15 +326,18 @@ app.get('/org-profile-postings', function (req, res) {
             if (err) {
                 console.log(err);
             }
-            
-            //Format dates
-            results.forEach(function (someEvent) {
-                formatDate(someEvent);
-            });
-            context.org_name = results[0].organization_name;
-            context.event = results;
+            if (results[0]) {
+                //Format dates
+                results.forEach(function (someEvent) {
+                    formatDate(someEvent);
+                });
+                context.org_name = results[0].organization_name;
+                context.event = results;
 
-            res.render("org-profile-postings", context);
+                res.render("org-profile-postings", context);
+            } else {
+                res.redirect("/org-profile");
+            }
         });
     } else {
         res.redirect('/org-sign-in');
@@ -342,7 +345,7 @@ app.get('/org-profile-postings', function (req, res) {
 });
 
 app.post('/org-event-cancel', function (req, res) {
-    var eventId = req.body['event'];
+    var eventId = req.body['event_id'];
     var query = "DELETE FROM Event WHERE event_id = ?";
     var eventParams = [eventId];
     mysql.pool.query(query, eventParams, function (err, results) {
@@ -543,7 +546,8 @@ app.get('/browse-events', function (req, res) {
         if (err) {
             console.log(err);
         }
-        //console.log(results);
+        console.log('Events returned:');
+        console.log(results);
 
         //Format dates
         results.forEach(function (someEvent) {
@@ -637,14 +641,14 @@ function getEventSkills(res, mysql, context, complete) {
             console.log(err);
         }
         
-        if (results[0]) {
+        //if (results[0]) {
             context.skill = results;
-            console.log("Event skills:");
-            console.log(context.skill);
+            //console.log("Event skills:");
+            //console.log(context.skill);
             complete();
-        } else {
-            res.render('404');
-        }
+        //} else {
+        //    res.render('404');
+        //}
     });
 }
 
