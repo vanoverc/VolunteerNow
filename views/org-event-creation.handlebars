@@ -1,59 +1,72 @@
-<div id="org-event-creation-container">
-  <form class="org-event-creation-form" action="org-event-creation" method="POST">
-    <div class="form-fields-container">
-      <label for="event_name">Event Name: </label>
-      <input id="event_name" type="text" name="event_name">
+<head>
+    <!-- Bootstrap Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="all" href="/css/organization.css">
+    <link rel="stylesheet" type="text/css" media="all" href="/css/main.css">
+</head>
+
+<div class="container-fluid background">
+    <div class="row">
+        <div class="col-xs-6 col-xs-offset-3 col-md-4 col-md-offset-4 background-container">
+            <div id="org-event-creation-container">
+                <form class="org-event-creation-form" action="org-event-creation" method="POST">
+                    <div class="form-fields-container">
+                        <label for="event_name">Event Name: </label>
+                        <input id="event_name" type="text" name="event_name">
+                    </div>
+                    <div class="form-fields-container">
+                        <label for="address_num">Address Number: </label>
+                        <input id="address_num" type="number" name="address_num">
+                    </div>
+                    <div class="form-fields-container">
+                        <label for="address_street">Street: </label>
+                        <input id="address_street" type="text" name="address_street">
+                    </div>
+                    <div class="form-fields-container">
+                        <label for="address_state">State: </label>
+                        <input id="address_state" type="text" name="address_state">
+                    </div>
+                    <div class="form-fields-container">
+                        <label for="address_zip">Zip Code: </label>
+                        <input id="address_zip" type="number" name="address_zip">
+                    </div>
+                    <div class="form-fields-container">
+                        <label for="min_age">Minimum Age: </label>
+                        <input id="min_age" type="number" name="min_age">
+                    </div>
+                    <div class="form-fields-container">
+                        <label for="date_start">Start Date: </label>
+                        <input id="date_start" type="date" name="date_start">
+                    </div>
+                    <div class="form-fields-container">
+                        <label for="date_end">End Date: </label>
+                        <input id="date_end" type="date" name="date_end">
+                    </div>
+                    <div class="form-fields-container">
+                        <label for="description">Description: </label>
+                        <input id="description" type="text" name="event_description">
+                    </div>
+                    <div class="form-fields-container">
+                        <label for="contact_email">Contact Email: </label>
+                        <input id="contact_email" type="email" name="contact_email">
+                    </div>
+                    <div class="form-fields-container">
+                        <label for="contact_phone">Contact Phone: </label>
+                        <input id="contact_phone" type="text" name="contact_phone">
+                    </div>
+                    <div class="form-fields-container">
+                        <label for="contact_name">Contact Name: </label>
+                        <input id="contact_name" type="text" name="contact_name">
+                    </div>
+                    <div class="form-fields-container">
+                        <label for="contact_url">Contact URL: </label>
+                        <input id="contact_url" type="URL" name="contact_url">
+                    </div>
+                    <div class="form-fields-container" align="center">
+                        <button type="submit" class="btn index-btn"><strong>Create Event</strong></button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-   <div class="form-fields-container">
-      <label for="address_num">Address Number: </label>
-      <input id="address_num" type="number" name="address_num">
-    </div>
-    <div class="form-fields-container">
-      <label for="address_street">Street: </label>
-      <input id="address_street" type="text" name="address_street">
-    </div>
-    <div class="form-fields-container">
-      <label for="address_state">State: </label>
-      <input id="address_state" type="text" name="address_state">
-    </div>
-    <div class="form-fields-container">
-      <label for="address_zip">Zip Code: </label>
-      <input id="address_zip" type="number" name="address_zip">
-    </div>
-    <div class="form-fields-container">
-      <label for="min_age">Minimum Age: </label>
-      <input id="min_age" type="number" name="min_age">
-    </div>
-    <div class="form-fields-container">
-      <label for="date_start">Start Date: </label>
-      <input id="date_start" type="date" name="date_start">
-    </div>
-    <div class="form-fields-container">
-      <label for="date_end">End Date: </label>
-      <input id="date_end" type="date" name="date_end">
-    </div>
-    <div class="form-fields-container">
-      <label for="description">Description: </label>
-      <input id="description" type="text" name="event_description">
-    </div>
-    <div class="form-fields-container">
-      <label for="contact_email">Contact Email: </label>
-      <input id="contact_email" type="email" name="contact_email">
-    </div>
-    <div class="form-fields-container">
-      <label for="contact_phone">Contact Phone: </label>
-      <input id="contact_phone" type="text" name="contact_phone">
-    </div>
-    <div class="form-fields-container">
-      <label for="contact_name">Contact Name: </label>
-      <input id="contact_name" type="text" name="contact_name">
-    </div>
-    <div class="form-fields-container">
-      <label for="contact_url">Contact URL: </label>
-      <input id="contact_url" type="URL" name="contact_url">
-    </div>
-    <div class="form-fields-container">
-      <button type="submit">Create Event</button>
-    </div>
-  </form>
 </div>
